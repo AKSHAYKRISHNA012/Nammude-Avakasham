@@ -34,15 +34,24 @@ export default function VaidyaMedicationSchedule({ language, onNotifyCaregiver }
       return m;
     }));
 
+    const targetMed = medications.find(m => m.id === id);
+    const medName = targetMed?.name || '';
+
     if (newStatus === 'taken') {
       confetti({
         particleCount: 50,
         spread: 60,
         origin: { y: 0.7 }
       });
-      showToast(language === 'ml' ? 'മരുന്ന് കഴിച്ചതായി രേഖപ്പെടുത്തി ✓' : 'Marked as taken ✓');
+      showToast(language === 'ml' ? `${medName} കഴിച്ചതായി രേഖപ്പെടുത്തി ✓` : `${medName} marked as taken ✓`);
+      speakText(
+        language === 'ml' 
+          ? `${medName} കഴിച്ചതായി രേഖപ്പെടുത്തി. നല്ല ആരോഗ്യം ആശംസിക്കുന്നു.` 
+          : `${medName} marked as taken. Stay healthy.`,
+        language
+      );
     } else if (newStatus === 'skipped') {
-      showToast(language === 'ml' ? 'മരുന്ന് ഒഴിവാക്കിയതായി രേഖപ്പെടുത്തി ⚠️' : 'Marked as skipped ⚠️');
+      showToast(language === 'ml' ? `${medName} ഒഴിവാക്കിയതായി രേഖപ്പെടുത്തി ⚠️` : `${medName} marked as skipped ⚠️`);
       if (onNotifyCaregiver) {
         onNotifyCaregiver(id);
       }
@@ -224,20 +233,20 @@ export default function VaidyaMedicationSchedule({ language, onNotifyCaregiver }
               </div>
 
               {/* Action buttons */}
-              <div className="flex items-center gap-3 self-end md:self-center flex-shrink-0">
+              <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 w-full sm:w-auto justify-start sm:justify-end flex-shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-teal-100/60">
                 
                 {/* Voice Reminder Trigger with Audio Equalizer */}
                 <button
                   onClick={() => handlePlayVoiceReminder(med)}
-                  className={`p-3.5 rounded-2xl flex items-center gap-2 text-xs font-black transition-all shadow-sm ${
+                  className={`px-4 py-3 rounded-2xl flex items-center gap-2 text-xs font-black transition-all shadow-sm ${
                     isSpeaking 
                       ? 'bg-rose-600 text-white animate-pulse' 
                       : 'bg-teal-50 hover:bg-teal-100 text-teal-900 border-2 border-teal-200'
                   }`}
                   title="Play Voice Reminder"
                 >
-                  <Volume2 className="w-5 h-5 text-teal-700" />
-                  <span className="hidden sm:inline">
+                  <Volume2 className="w-4 h-4 text-teal-700" />
+                  <span className="inline">
                     {isSpeaking ? (language === 'ml' ? 'നിർത്തൂ' : 'Stop') : (language === 'ml' ? 'ഓർമ്മപ്പെടുത്തൽ 🔊' : 'Voice 🔊')}
                   </span>
                 </button>
@@ -245,7 +254,7 @@ export default function VaidyaMedicationSchedule({ language, onNotifyCaregiver }
                 {/* Mark as Taken */}
                 <button
                   onClick={() => handleStatusChange(med.id, 'taken')}
-                  className={`px-5 py-3.5 rounded-2xl font-black text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all active:scale-95 ${
+                  className={`px-5 py-3 rounded-2xl font-black text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all active:scale-95 ${
                     isTaken 
                       ? 'bg-emerald-800 text-white ring-2 ring-emerald-500' 
                       : 'bg-emerald-600 hover:bg-emerald-700 text-white'
@@ -258,13 +267,13 @@ export default function VaidyaMedicationSchedule({ language, onNotifyCaregiver }
                 {/* Mark as Skipped */}
                 <button
                   onClick={() => handleStatusChange(med.id, 'skipped')}
-                  className={`px-4 py-3.5 rounded-2xl font-bold text-xs flex items-center gap-1.5 text-gray-500 hover:text-rose-700 hover:bg-rose-50 border border-gray-200 transition-colors ${
+                  className={`px-4 py-3 rounded-2xl font-bold text-xs flex items-center gap-1.5 text-gray-600 hover:text-rose-700 hover:bg-rose-50 border border-gray-300 transition-colors ${
                     isSkipped ? 'bg-rose-100 text-rose-900 border-rose-300 font-black' : ''
                   }`}
                   title="Mark as Skipped"
                 >
                   <X className="w-4 h-4" />
-                  <span className="hidden sm:inline">{language === 'ml' ? 'ഒഴിവാക്കി' : 'Skip'}</span>
+                  <span className="inline">{language === 'ml' ? 'ഒഴിവാക്കി' : 'Skip'}</span>
                 </button>
 
               </div>

@@ -129,15 +129,13 @@
         background: #94A3B8;
       }
 
-      /* Pulsing Microphones */
+      /* Pulsing Microphones Glow without scale jitter */
       @keyframes micPulseGlow {
         0%, 100% {
-          transform: scale(1);
-          box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+          box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.7), 0 10px 25px -5px rgba(0, 0, 0, 0.3);
         }
         50% {
-          transform: scale(1.06);
-          box-shadow: 0 0 0 20px rgba(220, 38, 38, 0);
+          box-shadow: 0 0 0 12px rgba(217, 119, 6, 0), 0 10px 25px -5px rgba(0, 0, 0, 0.3);
         }
       }
       .animate-mic-pulse {

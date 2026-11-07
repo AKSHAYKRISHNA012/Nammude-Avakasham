@@ -17,6 +17,7 @@ import { speakText, stopSpeech } from '../utils/speech.js';
 
 export default function SchemeDiscovery({ language, setActiveScreen, setSelectedSchemeId }) {
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedRationCard, setSelectedRationCard] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedSchemeId, setExpandedSchemeId] = useState(SCHEMES[0]?.id || null);
   const [isSpeakingId, setIsSpeakingId] = useState(null);
@@ -29,8 +30,31 @@ export default function SchemeDiscovery({ language, setActiveScreen, setSelected
     { id: 'health', label_ml: 'സൗജന്യ ചികിത്സ', label_en: 'Healthcare' }
   ];
 
+  const rationCards = [
+    { id: 'all', label_ml: 'എല്ലാ കാർഡുകളും', label_en: 'All Cards', color: 'bg-stone-100 text-stone-800 border-stone-300' },
+    { id: 'yellow', label_ml: 'മഞ്ഞ കാർഡ് (AAY അതീവ മുൻഗണന)', label_en: 'Yellow (AAY Extreme Poor)', color: 'bg-yellow-300 text-yellow-950 border-yellow-500 font-black' },
+    { id: 'pink', label_ml: 'പിങ്ക് കാർഡ് (PHH മുൻഗണന)', label_en: 'Pink (PHH Priority)', color: 'bg-pink-200 text-pink-950 border-pink-400 font-black' },
+    { id: 'blue', label_ml: 'നീല കാർഡ് (സബ്‌സിഡി)', label_en: 'Blue (NPHH Subsidy)', color: 'bg-sky-200 text-sky-950 border-sky-400 font-black' },
+    { id: 'white', label_ml: 'വെള്ള കാർഡ് (പൊതുവിഭാഗം)', label_en: 'White (General)', color: 'bg-white text-stone-900 border-stone-300 font-bold' }
+  ];
+
   const filteredSchemes = SCHEMES.filter(scheme => {
     const matchesCategory = selectedCategory === 'all' || scheme.category === selectedCategory;
+    
+    // Filter by ration card logic
+    let matchesRation = true;
+    if (selectedRationCard === 'yellow' || selectedRationCard === 'pink') {
+      // Priority cards: matches all welfare pensions and subsidized health schemes
+      matchesRation = true;
+    } else if (selectedRationCard === 'blue' || selectedRationCard === 'white') {
+      // General/Non-priority: check if scheme has no strict low-income cutoff or requires only disability
+      if (scheme.requires_disability) {
+        matchesRation = true;
+      } else if (scheme.max_income && scheme.max_income <= 100000 && selectedRationCard === 'white') {
+        matchesRation = false;
+      }
+    }
+
     const q = searchQuery.toLowerCase();
     const matchesSearch = 
       !q ||
@@ -38,7 +62,7 @@ export default function SchemeDiscovery({ language, setActiveScreen, setSelected
       scheme.name_en.toLowerCase().includes(q) ||
       scheme.target_group_ml.toLowerCase().includes(q) ||
       scheme.target_group_en.toLowerCase().includes(q);
-    return matchesCategory && matchesSearch;
+    return matchesCategory && matchesRation && matchesSearch;
   });
 
   const handleAudioPlayback = (scheme) => {
@@ -103,9 +127,9 @@ export default function SchemeDiscovery({ language, setActiveScreen, setSelected
 
         {/* Category Filter Pills */}
         <div className="flex flex-wrap items-center gap-2 mt-6 pt-6 border-t border-gray-100">
-          <span className="text-xs font-bold text-gray-400 mr-1 flex items-center gap-1">
+          <span className="text-xs font-bold text-gray-500 mr-1 flex items-center gap-1">
             <Filter className="w-3.5 h-3.5" />
-            <span>{language === 'ml' ? 'വിഭാഗം:' : 'Filter:'}</span>
+            <span>{language === 'ml' ? 'വിഭാഗം:' : 'Category:'}</span>
           </span>
           {categories.map(cat => (
             <button
@@ -118,6 +142,27 @@ export default function SchemeDiscovery({ language, setActiveScreen, setSelected
               }`}
             >
               {language === 'ml' ? cat.label_ml : cat.label_en}
+            </button>
+          ))}
+        </div>
+
+        {/* Kerala Ration Card Quick Filter */}
+        <div className="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-dashed border-gray-200">
+          <span className="text-xs font-bold text-stone-600 mr-1 flex items-center gap-1.5">
+            <span>🎫</span>
+            <span>{language === 'ml' ? 'റേഷൻ കാർഡ് പ്രകാരം:' : 'Ration Card Filter:'}</span>
+          </span>
+          {rationCards.map(rc => (
+            <button
+              key={rc.id}
+              onClick={() => setSelectedRationCard(rc.id)}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all border shadow-xs ${rc.color} ${
+                selectedRationCard === rc.id
+                  ? 'ring-2 ring-emerald-600 scale-105 shadow-md'
+                  : 'opacity-70 hover:opacity-100'
+              }`}
+            >
+              {language === 'ml' ? rc.label_ml : rc.label_en}
             </button>
           ))}
         </div>
