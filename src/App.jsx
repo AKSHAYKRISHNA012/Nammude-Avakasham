@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar.jsx';
+import LandingPage from './components/LandingPage.jsx';
 import WelcomeScreen from './components/WelcomeScreen.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import VoiceAssistant from './components/VoiceAssistant.jsx';
@@ -47,8 +48,8 @@ export default function App() {
   const [language, setLanguage] = useState('ml'); // Default Malayalam-first
   const [highContrast, setHighContrast] = useState(false);
   const [fontSize, setFontSize] = useState(2); // 1 = normal, 2 = large, 3 = extra large
-  const [currentMode, setCurrentMode] = useState('vaidya'); // 'rights' or 'vaidya'
-  const [activeScreen, setActiveScreen] = useState('vaidya_home'); // initial screen
+  const [currentMode, setCurrentMode] = useState('landing'); // 'landing', 'rights', or 'vaidya'
+  const [activeScreen, setActiveScreen] = useState('dashboard'); // screen for rights / vaidya
   const [selectedSchemeId, setSelectedSchemeId] = useState('ignaoap');
   const [isJargonModalOpen, setIsJargonModalOpen] = useState(false);
   const [isLegalModalOpen, setIsLegalModalOpen] = useState(false);
@@ -87,229 +88,256 @@ export default function App() {
   const currentNavItems = currentMode === 'vaidya' ? vaidyaNavItems : rightsNavItems;
 
   return (
-    <div className={`min-h-screen flex flex-col transition-colors ${highContrast ? 'high-contrast' : 'bg-[#FAF8F5] text-gray-900'} ${fontSizeClasses[fontSize]}`}>
+    <div className={`min-h-screen flex flex-col transition-colors ${highContrast ? 'high-contrast' : 'bg-[#FAF8F5] text-stone-900'} ${fontSizeClasses[fontSize]}`}>
       
       {/* Network Resilience & Offline Sync Banner */}
       <NetworkResilienceBanner language={language} />
 
-      {/* Top Glassmorphic Navbar */}
-      <Navbar
-        language={language}
-        setLanguage={setLanguage}
-        highContrast={highContrast}
-        setHighContrast={setHighContrast}
-        fontSize={fontSize}
-        setFontSize={setFontSize}
-        activeScreen={activeScreen}
-        setActiveScreen={setActiveScreen}
-        currentMode={currentMode}
-        setCurrentMode={setCurrentMode}
-        onOpenJargonModal={() => setIsJargonModalOpen(true)}
-        onOpenAuthModal={() => setIsAuthOpen(true)}
-      />
-
-      {/* Mode Switch Banner for Mobile Screens */}
-      <div className="lg:hidden bg-emerald-950 px-4 py-2.5 border-b border-emerald-800 flex items-center justify-center gap-3 shadow-md">
-        <button
-          onClick={() => {
-            setCurrentMode('rights');
-            setActiveScreen('welcome');
+      {/* Conditionally Render: Landing Page vs Interactive Application Dashboard */}
+      {currentMode === 'landing' ? (
+        <LandingPage
+          language={language}
+          setLanguage={setLanguage}
+          onNavigateToMode={(mode, screenId) => {
+            setCurrentMode(mode);
+            if (screenId) setActiveScreen(screenId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-          className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
-            currentMode === 'rights' ? 'bg-amber-400 text-emerald-950 shadow-md ring-2 ring-amber-300/60' : 'text-emerald-200 hover:text-white'
-          }`}
-        >
-          <span>🌴</span>
-          <span>{language === 'ml' ? 'ക്ഷേമ അവകാശങ്ങൾ' : 'Welfare Rights'}</span>
-        </button>
-
-        <button
-          onClick={() => {
-            setCurrentMode('vaidya');
-            setActiveScreen('vaidya_home');
-          }}
-          className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
-            currentMode === 'vaidya' ? 'bg-teal-400 text-teal-950 shadow-md ring-2 ring-teal-300/60' : 'text-emerald-200 hover:text-white'
-          }`}
-        >
-          <span>🩺</span>
-          <span>{language === 'ml' ? 'വോയ്‌സ് വൈദ്യ' : 'VoiceVaidya'}</span>
-        </button>
-      </div>
-
-      {/* Main Content Area */}
-      <main className="flex-1 pb-32">
-        
-        {/* VoiceVaidya Screens */}
-        {activeScreen === 'vaidya_home' && (
-          <VoiceVaidyaHome
+          onOpenAuthModal={() => setIsAuthOpen(true)}
+          onOpenLegalModal={() => setIsLegalModalOpen(true)}
+          onOpenJargonModal={() => setIsJargonModalOpen(true)}
+          highContrast={highContrast}
+        />
+      ) : (
+        <>
+          {/* Top Glassmorphic Navbar for Application View */}
+          <Navbar
             language={language}
-            onNavigateSection={(screenId) => setActiveScreen(screenId)}
-          />
-        )}
-
-        {activeScreen === 'vaidya_voice' && (
-          <VaidyaVoiceChat
-            language={language}
-          />
-        )}
-
-        {activeScreen === 'vaidya_rx' && (
-          <VaidyaPrescriptionOCR
-            language={language}
-            onAddPrescriptionToSchedule={() => setActiveScreen('vaidya_meds')}
-          />
-        )}
-
-        {activeScreen === 'vaidya_meds' && (
-          <VaidyaMedicationSchedule
-            language={language}
-            onNotifyCaregiver={() => {}}
-          />
-        )}
-
-        {activeScreen === 'vaidya_doctor' && (
-          <VaidyaDoctorVisit
-            language={language}
-          />
-        )}
-
-        {activeScreen === 'vaidya_caregiver' && (
-          <VaidyaCaregiver
-            language={language}
-          />
-        )}
-
-        {activeScreen === 'vaidya_history' && (
-          <VaidyaMedicalHistory
-            language={language}
-          />
-        )}
-
-        {/* Rights Navigator Screens */}
-        {activeScreen === 'welcome' && (
-          <WelcomeScreen
-            language={language}
+            setLanguage={setLanguage}
+            highContrast={highContrast}
+            setHighContrast={setHighContrast}
+            fontSize={fontSize}
+            setFontSize={setFontSize}
+            activeScreen={activeScreen}
             setActiveScreen={setActiveScreen}
-          />
-        )}
-
-        {activeScreen === 'dashboard' && (
-          <Dashboard
-            language={language}
-            setActiveScreen={setActiveScreen}
+            currentMode={currentMode}
+            setCurrentMode={setCurrentMode}
             onOpenJargonModal={() => setIsJargonModalOpen(true)}
+            onOpenAuthModal={() => setIsAuthOpen(true)}
           />
-        )}
 
-        {activeScreen === 'voice' && (
-          <VoiceAssistant
-            language={language}
-            setActiveScreen={setActiveScreen}
-          />
-        )}
-
-        {activeScreen === 'schemes' && (
-          <SchemeDiscovery
-            language={language}
-            setActiveScreen={setActiveScreen}
-            setSelectedSchemeId={setSelectedSchemeId}
-          />
-        )}
-
-        {activeScreen === 'eligibility' && (
-          <EligibilityAssessment
-            language={language}
-            setActiveScreen={setActiveScreen}
-            setSelectedSchemeId={setSelectedSchemeId}
-          />
-        )}
-
-        {activeScreen === 'documents' && (
-          <DocumentIntelligence
-            language={language}
-          />
-        )}
-
-        {activeScreen === 'companion' && (
-          <ApplicationCompanion
-            language={language}
-            setActiveScreen={setActiveScreen}
-            selectedSchemeId={selectedSchemeId}
-          />
-        )}
-
-        {activeScreen === 'tracking' && (
-          <ApplicationTracking
-            language={language}
-          />
-        )}
-
-        {activeScreen === 'assistance' && (
-          <HumanAssistance
-            language={language}
-          />
-        )}
-
-        {/* Demo view for Sign-In Card 2 */}
-        {activeScreen === 'auth_demo' && (
-          <DemoOne />
-        )}
-
-        {/* Global Compliance & Trust Footer */}
-        <footer className="max-w-5xl mx-auto px-4 pt-12 pb-4 text-center text-xs text-gray-500 space-y-2 border-t border-gray-200/60 mt-12">
-          <div className="flex flex-wrap items-center justify-center gap-4 font-bold text-gray-600">
-            <button onClick={() => setIsLegalModalOpen(true)} className="hover:text-emerald-800 transition-colors">
-              {language === 'ml' ? 'സ്വകാര്യതാ നയം (DPDP 2023)' : 'Privacy Policy (DPDP Act)'}
+          {/* Mode Switch Banner for Mobile Screens */}
+          <div className="lg:hidden bg-[#064e3b] px-4 py-2.5 border-b border-emerald-800 flex items-center justify-center gap-2.5 shadow-md">
+            <button
+              onClick={() => {
+                setCurrentMode('landing');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="px-3 py-1.5 rounded-xl text-xs font-black text-emerald-200 hover:text-white"
+            >
+              <span>🏠 ഹോം</span>
             </button>
-            <span>•</span>
-            <button onClick={() => setIsLegalModalOpen(true)} className="hover:text-emerald-800 transition-colors">
-              {language === 'ml' ? 'സേവന വ്യവസ്ഥകൾ' : 'Terms of Service'}
+
+            <button
+              onClick={() => {
+                setCurrentMode('rights');
+                setActiveScreen('dashboard');
+              }}
+              className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1 ${
+                currentMode === 'rights' ? 'bg-amber-400 text-emerald-950 shadow-md ring-2 ring-amber-300/60' : 'text-emerald-200 hover:text-white'
+              }`}
+            >
+              <span>🌴 അവകാശങ്ങൾ</span>
             </button>
-            <span>•</span>
-            <button onClick={() => setIsLegalModalOpen(true)} className="hover:text-emerald-800 transition-colors">
-              {language === 'ml' ? 'കുക്കി മുൻഗണനകൾ' : 'Cookie Preferences'}
-            </button>
-            <span>•</span>
-            <button onClick={() => setIsLegalModalOpen(true)} className="hover:text-emerald-800 transition-colors">
-              {language === 'ml' ? 'ആക്സസിബിലിറ്റി (WCAG 2.1 AA)' : 'Accessibility Statement'}
+
+            <button
+              onClick={() => {
+                setCurrentMode('vaidya');
+                setActiveScreen('vaidya_home');
+              }}
+              className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1 ${
+                currentMode === 'vaidya' ? 'bg-teal-400 text-teal-950 shadow-md ring-2 ring-teal-300/60' : 'text-emerald-200 hover:text-white'
+              }`}
+            >
+              <span>🩺 വോയ്‌സ് വൈദ്യ</span>
             </button>
           </div>
-          <p className="text-[11px] text-gray-400">
-            © 2026 Nammude Avakasham & VoiceVaidya. Powered by Antigravity Pro Swarm. Zero Client Secrets Enclave.
-          </p>
-        </footer>
-      </main>
 
-      {/* Modern Floating Island Bottom Dock */}
-      <div className="fixed bottom-4 left-0 right-0 z-40 px-3 pointer-events-none">
-        <nav className="pointer-events-auto floating-dock rounded-3xl max-w-xl sm:max-w-2xl mx-auto px-3 py-2 flex items-center justify-around border-2 border-white/80 shadow-elevated">
-          {currentNavItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeScreen === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveScreen(item.id)}
-                className={`flex flex-col items-center justify-center py-1.5 px-2.5 rounded-2xl transition-all relative ${
-                  isActive
-                    ? 'text-teal-900 font-black scale-108'
-                    : 'text-gray-500 hover:text-teal-800'
-                } ${item.highlight ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-emerald-950 font-black px-4 shadow-md ring-2 ring-amber-300/60 scale-105' : ''}`}
-                title={language === 'ml' ? item.label_ml : item.label_en}
-              >
-                <Icon className={`w-5 h-5 ${isActive && !item.highlight ? 'text-teal-700 stroke-[2.8]' : ''}`} />
-                <span className="text-[10px] sm:text-[11px] mt-0.5 tracking-tight font-extrabold truncate max-w-[65px] text-center">
-                  {language === 'ml' ? item.label_ml : item.label_en}
-                </span>
-                {isActive && !item.highlight && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-teal-700 mt-0.5 shadow-sm"></span>
-                )}
-              </button>
-            );
-          })}
-        </nav>
-      </div>
+          {/* Main Content Area for Rights / Vaidya */}
+          <main className="flex-1 pb-32">
+            
+            {/* VoiceVaidya Screens */}
+            {activeScreen === 'vaidya_home' && (
+              <VoiceVaidyaHome
+                language={language}
+                onNavigateSection={(screenId) => setActiveScreen(screenId)}
+              />
+            )}
+
+            {activeScreen === 'vaidya_voice' && (
+              <VaidyaVoiceChat
+                language={language}
+              />
+            )}
+
+            {activeScreen === 'vaidya_rx' && (
+              <VaidyaPrescriptionOCR
+                language={language}
+                onAddPrescriptionToSchedule={() => setActiveScreen('vaidya_meds')}
+              />
+            )}
+
+            {activeScreen === 'vaidya_meds' && (
+              <VaidyaMedicationSchedule
+                language={language}
+                onNotifyCaregiver={() => {}}
+              />
+            )}
+
+            {activeScreen === 'vaidya_doctor' && (
+              <VaidyaDoctorVisit
+                language={language}
+              />
+            )}
+
+            {activeScreen === 'vaidya_caregiver' && (
+              <VaidyaCaregiver
+                language={language}
+              />
+            )}
+
+            {activeScreen === 'vaidya_history' && (
+              <VaidyaMedicalHistory
+                language={language}
+              />
+            )}
+
+            {/* Rights Navigator Screens */}
+            {activeScreen === 'welcome' && (
+              <WelcomeScreen
+                language={language}
+                setActiveScreen={setActiveScreen}
+              />
+            )}
+
+            {activeScreen === 'dashboard' && (
+              <Dashboard
+                language={language}
+                setActiveScreen={setActiveScreen}
+                onOpenJargonModal={() => setIsJargonModalOpen(true)}
+              />
+            )}
+
+            {activeScreen === 'voice' && (
+              <VoiceAssistant
+                language={language}
+                setActiveScreen={setActiveScreen}
+              />
+            )}
+
+            {activeScreen === 'schemes' && (
+              <SchemeDiscovery
+                language={language}
+                setActiveScreen={setActiveScreen}
+                setSelectedSchemeId={setSelectedSchemeId}
+              />
+            )}
+
+            {activeScreen === 'eligibility' && (
+              <EligibilityAssessment
+                language={language}
+                setActiveScreen={setActiveScreen}
+                setSelectedSchemeId={setSelectedSchemeId}
+              />
+            )}
+
+            {activeScreen === 'documents' && (
+              <DocumentIntelligence
+                language={language}
+              />
+            )}
+
+            {activeScreen === 'companion' && (
+              <ApplicationCompanion
+                language={language}
+                setActiveScreen={setActiveScreen}
+                selectedSchemeId={selectedSchemeId}
+              />
+            )}
+
+            {activeScreen === 'tracking' && (
+              <ApplicationTracking
+                language={language}
+              />
+            )}
+
+            {activeScreen === 'assistance' && (
+              <HumanAssistance
+                language={language}
+              />
+            )}
+
+            {/* Demo view for Sign-In Card */}
+            {activeScreen === 'auth_demo' && (
+              <DemoOne />
+            )}
+
+            {/* Global Compliance & Trust Footer */}
+            <footer className="max-w-5xl mx-auto px-4 pt-12 pb-4 text-center text-xs text-stone-500 space-y-2 border-t border-stone-200/80 mt-12">
+              <div className="flex flex-wrap items-center justify-center gap-4 font-bold text-stone-600">
+                <button onClick={() => setIsLegalModalOpen(true)} className="hover:text-emerald-800 transition-colors">
+                  {language === 'ml' ? 'സ്വകാര്യതാ നയം (DPDP 2023)' : 'Privacy Policy (DPDP Act)'}
+                </button>
+                <span>•</span>
+                <button onClick={() => setIsLegalModalOpen(true)} className="hover:text-emerald-800 transition-colors">
+                  {language === 'ml' ? 'സേവന വ്യവസ്ഥകൾ' : 'Terms of Service'}
+                </button>
+                <span>•</span>
+                <button onClick={() => setIsLegalModalOpen(true)} className="hover:text-emerald-800 transition-colors">
+                  {language === 'ml' ? 'കുക്കി മുൻഗണനകൾ' : 'Cookie Preferences'}
+                </button>
+                <span>•</span>
+                <button onClick={() => setIsLegalModalOpen(true)} className="hover:text-emerald-800 transition-colors">
+                  {language === 'ml' ? 'ആക്സസിബിലിറ്റി (WCAG 2.1 AA)' : 'Accessibility Statement'}
+                </button>
+              </div>
+              <p className="text-[11px] text-stone-400">
+                © 2026 Nammude Avakasham & VoiceVaidya. Powered by Antigravity Pro Swarm. Zero Client Secrets Enclave.
+              </p>
+            </footer>
+          </main>
+
+          {/* Floating Island Bottom Dock for Application Navigation */}
+          <div className="fixed bottom-4 left-0 right-0 z-40 px-3 pointer-events-none">
+            <nav className="pointer-events-auto floating-dock rounded-3xl max-w-xl sm:max-w-2xl mx-auto px-3 py-2 flex items-center justify-around border-2 border-white/80 shadow-elevated">
+              {currentNavItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = activeScreen === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveScreen(item.id)}
+                    className={`flex flex-col items-center justify-center py-1.5 px-2.5 rounded-2xl transition-all relative ${
+                      isActive
+                        ? 'text-emerald-950 font-black scale-108'
+                        : 'text-stone-500 hover:text-emerald-800'
+                    } ${item.highlight ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-emerald-950 font-black px-4 shadow-md ring-2 ring-amber-300/60 scale-105' : ''}`}
+                    title={language === 'ml' ? item.label_ml : item.label_en}
+                  >
+                    <Icon className={`w-5 h-5 ${isActive && !item.highlight ? 'text-emerald-800 stroke-[2.8]' : ''}`} />
+                    <span className="text-[10px] sm:text-[11px] mt-0.5 tracking-tight font-extrabold truncate max-w-[65px] text-center">
+                      {language === 'ml' ? item.label_ml : item.label_en}
+                    </span>
+                    {isActive && !item.highlight && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-800 mt-0.5 shadow-sm"></span>
+                    )}
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+        </>
+      )}
 
       {/* Government Jargon Glossary Modal */}
       <JargonBusterModal
@@ -325,12 +353,12 @@ export default function App() {
         language={language}
       />
 
-      {/* 3D Sign In Card Modal */}
+      {/* 3D Kerala-Themed Sign In Card Modal */}
       {isAuthOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <SignInCard
-            title={language === 'ml' ? 'നമ്മുടെ അവകാശം ലോഗിൻ' : 'Nammude Avakasham'}
-            subtitle={language === 'ml' ? 'ക്ഷേമ & ആരോഗ്യ സേവനങ്ങൾക്കായി സൈൻ ഇൻ ചെയ്യുക' : 'Sign in to access your welfare & health services'}
+            title={language === 'ml' ? 'നമ്മുടെ അവകാശം – ലോഗിൻ' : 'Nammude Avakasham Portal'}
+            subtitle={language === 'ml' ? 'കേരള ക്ഷേമ & ആരോഗ്യ സേവനങ്ങൾക്കായി പ്രവേശിക്കുക' : 'Sign in to access your welfare & health services'}
             onClose={() => setIsAuthOpen(false)}
             onSuccess={(user) => {
               alert(language === 'ml' ? `ലോഗിൻ വിജയകരം: ${user.email}` : `Sign in successful for ${user.email}`);

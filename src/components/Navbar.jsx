@@ -1,5 +1,5 @@
 import React from 'react';
-import { Volume2, Eye, HelpCircle, HeartPulse, PhoneCall, Sparkles, LogIn } from 'lucide-react';
+import { Volume2, Eye, HelpCircle, HeartPulse, Sparkles, LogIn, Home } from 'lucide-react';
 import { speakText } from '../utils/speech.js';
 
 export default function Navbar({
@@ -28,9 +28,13 @@ export default function Navbar({
     setFontSize(prev => Math.max(prev - 1, 1));
   };
 
+  const handleSwitchToLanding = () => {
+    setCurrentMode('landing');
+  };
+
   const handleSwitchToRights = () => {
     setCurrentMode('rights');
-    setActiveScreen('welcome');
+    setActiveScreen('dashboard');
   };
 
   const handleSwitchToVaidya = () => {
@@ -48,24 +52,25 @@ export default function Navbar({
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-emerald-950/95 backdrop-blur-xl text-white shadow-elevated border-b-2 border-amber-400/80 transition-all">
+    <header className="sticky top-0 z-50 bg-[#064e3b]/95 backdrop-blur-xl text-white shadow-elevated border-b-2 border-amber-400/80 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
           {/* Logo & Branding with Kerala Heritage Seal */}
           <div 
-            onClick={currentMode === 'rights' ? handleSwitchToRights : handleSwitchToVaidya}
+            onClick={handleSwitchToLanding}
             className="flex items-center gap-3.5 cursor-pointer group select-none"
+            title={language === 'ml' ? 'ഹോം പേജിലേക്ക് പോകുക' : 'Go to Home'}
           >
-            <div className="w-13 h-13 p-2 rounded-2xl bg-gradient-to-tr from-amber-500 via-amber-400 to-yellow-300 text-emerald-950 flex items-center justify-center font-black text-2xl shadow-lg border-2 border-white/80 group-hover:scale-105 transition-transform">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-amber-400 to-yellow-300 text-emerald-950 flex items-center justify-center font-black text-2xl shadow-lg border-2 border-white/80 group-hover:scale-105 transition-transform">
               {currentMode === 'vaidya' ? '🩺' : '🌴'}
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="font-black text-xl sm:text-2xl tracking-tight text-white group-hover:text-amber-300 transition-colors">
+                <h1 className="font-black text-lg sm:text-xl tracking-tight text-white group-hover:text-amber-300 transition-colors">
                   {currentMode === 'vaidya' ? 'വോയ്‌സ് വൈദ്യ' : 'നമ്മുടെ അവകാശം'}
                 </h1>
-                <span className={`text-[10px] sm:text-xs font-black px-2.5 py-0.5 rounded-full shadow-sm tracking-wide ${
+                <span className={`text-[10px] sm:text-xs font-black px-2 py-0.5 rounded-full shadow-sm tracking-wide ${
                   currentMode === 'vaidya' 
                     ? 'bg-teal-400 text-teal-950 ring-2 ring-teal-300/40' 
                     : 'bg-amber-400 text-emerald-950 ring-2 ring-amber-300/40'
@@ -81,30 +86,42 @@ export default function Navbar({
             </div>
           </div>
 
-          {/* Central Mode Switcher: Rights vs VoiceVaidya (Interactive Glass Pills) */}
+          {/* Central Mode Switcher: Home vs Rights vs VoiceVaidya (Interactive Glass Pills) */}
           <div className="hidden lg:flex items-center bg-black/40 p-1.5 rounded-2xl border border-emerald-700/60 shadow-inner">
             <button
+              onClick={handleSwitchToLanding}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
+                currentMode === 'landing'
+                  ? 'bg-white text-emerald-950 shadow-md ring-2 ring-white/60 scale-102'
+                  : 'text-emerald-200 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Home className="w-3.5 h-3.5" />
+              <span>{language === 'ml' ? 'ഹോം' : 'Home'}</span>
+            </button>
+
+            <button
               onClick={handleSwitchToRights}
-              className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
                 currentMode === 'rights'
                   ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-emerald-950 shadow-md ring-2 ring-amber-300/60 scale-102'
                   : 'text-emerald-200 hover:text-white hover:bg-white/5'
               }`}
             >
-              <span className="text-sm">🌴</span>
+              <span>🌴</span>
               <span>{language === 'ml' ? 'ക്ഷേമ അവകാശങ്ങൾ' : 'Welfare Rights'}</span>
             </button>
 
             <button
               onClick={handleSwitchToVaidya}
-              className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
                 currentMode === 'vaidya'
                   ? 'bg-gradient-to-r from-teal-400 to-emerald-400 text-teal-950 shadow-md ring-2 ring-teal-300/60 scale-102'
                   : 'text-emerald-200 hover:text-white hover:bg-white/5'
               }`}
             >
-              <HeartPulse className="w-4 h-4 text-emerald-900" />
-              <span>{language === 'ml' ? 'വോയ്‌സ് വൈദ്യ (ആരോഗ്യം)' : 'VoiceVaidya Health'}</span>
+              <HeartPulse className="w-3.5 h-3.5 text-emerald-900" />
+              <span>{language === 'ml' ? 'വോയ്‌സ് വൈദ്യ' : 'VoiceVaidya'}</span>
             </button>
           </div>
 
@@ -169,16 +186,16 @@ export default function Navbar({
             <button
               onClick={onOpenAuthModal}
               title={language === 'ml' ? 'പോർട്ടൽ ലോഗിൻ (Sign In)' : 'Citizen / Officer Sign In'}
-              className="p-2 sm:px-3 sm:py-2 text-xs font-bold rounded-xl bg-purple-950/80 hover:bg-purple-900 text-purple-200 border border-purple-500/50 transition-all flex items-center gap-1.5 shadow-sm active:scale-95"
+              className="p-2 sm:px-3 sm:py-2 text-xs font-bold rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/50 transition-all flex items-center gap-1.5 shadow-sm active:scale-95"
             >
-              <LogIn className="w-4 h-4 text-purple-300" />
+              <LogIn className="w-4 h-4 text-amber-400" />
               <span className="hidden sm:inline">{language === 'ml' ? 'ലോഗിൻ' : 'Sign In'}</span>
             </button>
 
             {/* Language Switcher Button with Gradient Glow */}
             <button
               onClick={toggleLanguage}
-              className="px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-emerald-950 font-black text-xs sm:text-sm tracking-wider shadow-md transition-all active:scale-95 border-2 border-white/60 flex items-center gap-1.5"
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-emerald-950 font-black text-xs sm:text-sm tracking-wider shadow-md transition-all active:scale-95 border-2 border-white/60 flex items-center gap-1.5"
             >
               <span>{language === 'ml' ? 'English' : 'മലയാളം'}</span>
             </button>

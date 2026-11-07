@@ -8,9 +8,10 @@
 ## 1. Runtime Environment
 - **Live Server**: Node.js Express serving API and production SPA at `http://127.0.0.1:5000`
 - **FastAPI Backend Enclave**: Available in `backend-fastapi/` for enterprise PostgreSQL deployment
-- **Frontend Build**: Vite production bundle in `dist/` (471 kB JS, 5 kB HTML)
+- **Frontend Build**: Vite production bundle in `dist/` (751 kB JS, 5.3 kB HTML)
 
-## 2. Active Endpoints
+## 2. Active Endpoints & Routes
+- `/` (Comprehensive Landing Page with seamless mode switching to Welfare Rights and VoiceVaidya)
 - `/api/schemes` (List & filter verified Kerala welfare schemes)
 - `/api/eligibility/assess` (5-vector eligibility scoring)
 - `/api/voice/assistant` (Welfare Rights voice Q&A)

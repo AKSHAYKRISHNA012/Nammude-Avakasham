@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
-import { Mail, Lock, Eye, EyeClosed, ArrowRight, Sparkles, Check } from 'lucide-react';
+import { Mail, Lock, Eye, EyeClosed, ArrowRight, Sparkles, Check, ShieldCheck, HeartPulse } from 'lucide-react';
 
 import { cn } from "@/lib/utils"
 
@@ -12,9 +12,8 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
       type={type}
       data-slot="input"
       className={cn(
-        "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+        "file:text-foreground placeholder:text-muted-foreground selection:bg-amber-500 selection:text-black border-emerald-800/80 flex h-10 w-full min-w-0 rounded-xl border bg-emerald-950/40 px-3.5 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm text-white placeholder:text-emerald-300/40",
+        "focus-visible:border-amber-400 focus-visible:ring-amber-400/30 focus-visible:ring-[3px]",
         className
       )}
       {...props}
@@ -31,11 +30,11 @@ interface ComponentProps {
 }
 
 export function Component({
-  title = "Welcome Back",
-  subtitle = "Sign in to continue to StyleMe",
+  title = "നമ്മുടെ അവകാശം – ലോഗിൻ",
+  subtitle = "കേരള ക്ഷേമ & ആരോഗ്യ സേവനങ്ങൾക്കായി പ്രവേശിക്കുക",
   onSuccess,
   onClose,
-  bgImageUrl = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80"
+  bgImageUrl = ""
 }: ComponentProps = {}) {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -45,11 +44,11 @@ export function Component({
   const [rememberMe, setRememberMe] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  // For 3D card effect - increased rotation range for more pronounced 3D effect
+  // For 3D card tilt effect
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const rotateX = useTransform(mouseY, [-300, 300], [10, -10]);
-  const rotateY = useTransform(mouseX, [-300, 300], [-10, 10]);
+  const rotateX = useTransform(mouseY, [-300, 300], [8, -8]);
+  const rotateY = useTransform(mouseX, [-300, 300], [-8, 8]);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -69,27 +68,19 @@ export function Component({
     setTimeout(() => {
       setIsLoading(false);
       if (onSuccess) {
-        onSuccess({ email: email || 'user@example.com' });
+        onSuccess({ email: email || 'citizen@kerala.gov.in' });
       }
-    }, 1500);
+    }, 1200);
   };
 
   return (
-    <div className="min-h-screen w-screen bg-black relative overflow-hidden flex items-center justify-center p-4">
-      {/* Background gradient effect - matches the purple OnlyPipe style */}
-      <div className="absolute inset-0 bg-gradient-to-b from-purple-500/40 via-purple-700/50 to-black pointer-events-none" />
+    <div className="min-h-screen w-screen bg-[#021811] relative overflow-hidden flex items-center justify-center p-4">
+      {/* Background Kerala Rainforest gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#064e3b]/90 via-[#022c22]/95 to-[#01140e] pointer-events-none" />
 
-      {/* Unsplash ambient imagery overlay */}
-      {bgImageUrl && (
-        <img
-          src={bgImageUrl}
-          alt="Ambient texture backdrop"
-          className="absolute inset-0 w-full h-full object-cover opacity-15 pointer-events-none mix-blend-overlay"
-        />
-      )}
-      
-      {/* Subtle noise texture overlay */}
-      <div className="absolute inset-0 opacity-[0.03] mix-blend-soft-light pointer-events-none" 
+      {/* Subtle background texture */}
+      <div 
+        className="absolute inset-0 opacity-[0.04] mix-blend-soft-light pointer-events-none" 
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
           backgroundSize: '200px 200px'
@@ -100,19 +91,19 @@ export function Component({
       {onClose && (
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 z-30 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all backdrop-blur-md border border-white/10"
+          className="absolute top-6 right-6 z-30 p-2.5 rounded-full bg-black/40 hover:bg-black/60 text-amber-300 border border-amber-400/30 transition-all backdrop-blur-md cursor-pointer"
           aria-label="Close"
         >
           ✕
         </button>
       )}
 
-      {/* Top radial glow */}
-      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-[120vh] h-[60vh] rounded-b-[50%] bg-purple-400/20 blur-[80px] pointer-events-none" />
+      {/* Top radial glow in Kasavu Gold & Emerald */}
+      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-[120vh] h-[55vh] rounded-b-[50%] bg-emerald-600/15 blur-[90px] pointer-events-none" />
       <motion.div 
-        className="absolute top-0 left-1/2 transform -translate-x-1/2 w-[100vh] h-[60vh] rounded-b-full bg-purple-300/20 blur-[60px] pointer-events-none"
+        className="absolute top-0 left-1/2 transform -translate-x-1/2 w-[90vh] h-[50vh] rounded-b-full bg-amber-500/10 blur-[80px] pointer-events-none"
         animate={{ 
-          opacity: [0.15, 0.3, 0.15],
+          opacity: [0.15, 0.28, 0.15],
           scale: [0.98, 1.02, 0.98]
         }}
         transition={{ 
@@ -121,28 +112,11 @@ export function Component({
           repeatType: "mirror"
         }}
       />
-      <motion.div 
-        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[90vh] h-[90vh] rounded-t-full bg-purple-400/20 blur-[60px] pointer-events-none"
-        animate={{ 
-          opacity: [0.3, 0.5, 0.3],
-          scale: [1, 1.1, 1]
-        }}
-        transition={{ 
-          duration: 6, 
-          repeat: Infinity,
-          repeatType: "mirror",
-          delay: 1
-        }}
-      />
-
-      {/* Animated glow spots */}
-      <div className="absolute left-1/4 top-1/4 w-96 h-96 bg-white/5 rounded-full blur-[100px] animate-pulse opacity-40 pointer-events-none" />
-      <div className="absolute right-1/4 bottom-1/4 w-96 h-96 bg-white/5 rounded-full blur-[100px] animate-pulse delay-1000 opacity-40 pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.6 }}
         className="w-full max-w-sm relative z-10"
         style={{ perspective: 1500 }}
       >
@@ -156,14 +130,13 @@ export function Component({
           <div className="relative group">
             {/* Card glow effect */}
             <motion.div 
-              className="absolute -inset-[1px] rounded-2xl opacity-0 group-hover:opacity-70 transition-opacity duration-700"
+              className="absolute -inset-[1px] rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"
               animate={{
                 boxShadow: [
-                  "0 0 10px 2px rgba(255,255,255,0.03)",
-                  "0 0 15px 5px rgba(255,255,255,0.05)",
-                  "0 0 10px 2px rgba(255,255,255,0.03)"
+                  "0 0 15px 2px rgba(217,119,6,0.15)",
+                  "0 0 25px 4px rgba(245,158,11,0.25)",
+                  "0 0 15px 2px rgba(217,119,6,0.15)"
                 ],
-                opacity: [0.2, 0.4, 0.2]
               }}
               transition={{ 
                 duration: 4, 
@@ -173,112 +146,39 @@ export function Component({
               }}
             />
 
-            {/* Traveling light beam effect */}
-            <div className="absolute -inset-[1px] rounded-2xl overflow-hidden pointer-events-none">
-              {/* Top light beam */}
+            {/* Traveling Kasavu Gold light beam effect */}
+            <div className="absolute -inset-[1px] rounded-3xl overflow-hidden pointer-events-none">
               <motion.div 
-                className="absolute top-0 left-0 h-[3px] w-[50%] bg-gradient-to-r from-transparent via-white to-transparent opacity-70"
-                initial={{ filter: "blur(2px)" }}
-                animate={{ 
-                  left: ["-50%", "100%"],
-                  opacity: [0.3, 0.7, 0.3],
-                  filter: ["blur(1px)", "blur(2.5px)", "blur(1px)"]
-                }}
-                transition={{ 
-                  left: { duration: 2.5, ease: "easeInOut", repeat: Infinity, repeatDelay: 1 },
-                  opacity: { duration: 1.2, repeat: Infinity, repeatType: "mirror" },
-                  filter: { duration: 1.5, repeat: Infinity, repeatType: "mirror" }
-                }}
+                className="absolute top-0 left-0 h-[3px] w-[50%] bg-gradient-to-r from-transparent via-amber-400 to-transparent opacity-80"
+                animate={{ left: ["-50%", "100%"] }}
+                transition={{ duration: 2.8, ease: "easeInOut", repeat: Infinity, repeatDelay: 1 }}
               />
-              
-              {/* Right light beam */}
               <motion.div 
-                className="absolute top-0 right-0 h-[50%] w-[3px] bg-gradient-to-b from-transparent via-white to-transparent opacity-70"
-                initial={{ filter: "blur(2px)" }}
-                animate={{ 
-                  top: ["-50%", "100%"],
-                  opacity: [0.3, 0.7, 0.3],
-                  filter: ["blur(1px)", "blur(2.5px)", "blur(1px)"]
-                }}
-                transition={{ 
-                  top: { duration: 2.5, ease: "easeInOut", repeat: Infinity, repeatDelay: 1, delay: 0.6 },
-                  opacity: { duration: 1.2, repeat: Infinity, repeatType: "mirror", delay: 0.6 },
-                  filter: { duration: 1.5, repeat: Infinity, repeatType: "mirror", delay: 0.6 }
-                }}
+                className="absolute bottom-0 right-0 h-[3px] w-[50%] bg-gradient-to-r from-transparent via-emerald-400 to-transparent opacity-80"
+                animate={{ right: ["-50%", "100%"] }}
+                transition={{ duration: 2.8, ease: "easeInOut", repeat: Infinity, repeatDelay: 1, delay: 1.4 }}
               />
-              
-              {/* Bottom light beam */}
-              <motion.div 
-                className="absolute bottom-0 right-0 h-[3px] w-[50%] bg-gradient-to-r from-transparent via-white to-transparent opacity-70"
-                initial={{ filter: "blur(2px)" }}
-                animate={{ 
-                  right: ["-50%", "100%"],
-                  opacity: [0.3, 0.7, 0.3],
-                  filter: ["blur(1px)", "blur(2.5px)", "blur(1px)"]
-                }}
-                transition={{ 
-                  right: { duration: 2.5, ease: "easeInOut", repeat: Infinity, repeatDelay: 1, delay: 1.2 },
-                  opacity: { duration: 1.2, repeat: Infinity, repeatType: "mirror", delay: 1.2 },
-                  filter: { duration: 1.5, repeat: Infinity, repeatType: "mirror", delay: 1.2 }
-                }}
-              />
-              
-              {/* Left light beam */}
-              <motion.div 
-                className="absolute bottom-0 left-0 h-[50%] w-[3px] bg-gradient-to-b from-transparent via-white to-transparent opacity-70"
-                initial={{ filter: "blur(2px)" }}
-                animate={{ 
-                  bottom: ["-50%", "100%"],
-                  opacity: [0.3, 0.7, 0.3],
-                  filter: ["blur(1px)", "blur(2.5px)", "blur(1px)"]
-                }}
-                transition={{ 
-                  bottom: { duration: 2.5, ease: "easeInOut", repeat: Infinity, repeatDelay: 1, delay: 1.8 },
-                  opacity: { duration: 1.2, repeat: Infinity, repeatType: "mirror", delay: 1.8 },
-                  filter: { duration: 1.5, repeat: Infinity, repeatType: "mirror", delay: 1.8 }
-                }}
-              />
-              
-              {/* Subtle corner glow spots */}
-              <motion.div className="absolute top-0 left-0 h-[5px] w-[5px] rounded-full bg-white/40 blur-[1px]" animate={{ opacity: [0.2, 0.4, 0.2] }} transition={{ duration: 2, repeat: Infinity, repeatType: "mirror" }} />
-              <motion.div className="absolute top-0 right-0 h-[8px] w-[8px] rounded-full bg-white/60 blur-[2px]" animate={{ opacity: [0.2, 0.4, 0.2] }} transition={{ duration: 2.4, repeat: Infinity, repeatType: "mirror", delay: 0.5 }} />
-              <motion.div className="absolute bottom-0 right-0 h-[8px] w-[8px] rounded-full bg-white/60 blur-[2px]" animate={{ opacity: [0.2, 0.4, 0.2] }} transition={{ duration: 2.2, repeat: Infinity, repeatType: "mirror", delay: 1 }} />
-              <motion.div className="absolute bottom-0 left-0 h-[5px] w-[5px] rounded-full bg-white/40 blur-[1px]" animate={{ opacity: [0.2, 0.4, 0.2] }} transition={{ duration: 2.3, repeat: Infinity, repeatType: "mirror", delay: 1.5 }} />
             </div>
 
-            {/* Card border glow */}
-            <div className="absolute -inset-[0.5px] rounded-2xl bg-gradient-to-r from-white/3 via-white/7 to-white/3 opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
-            
-            {/* Glass card background */}
-            <div className="relative bg-black/50 backdrop-blur-xl rounded-2xl p-6 border border-white/10 shadow-2xl overflow-hidden">
-              {/* Subtle card inner patterns */}
-              <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
-                style={{
-                  backgroundImage: `linear-gradient(135deg, white 0.5px, transparent 0.5px), linear-gradient(45deg, white 0.5px, transparent 0.5px)`,
-                  backgroundSize: '30px 30px'
-                }}
-              />
-
-              {/* Logo and header */}
-              <div className="text-center space-y-1 mb-5">
+            {/* Glass card background - Rainforest Green & Kasavu Gold border */}
+            <div className="relative bg-[#06261c]/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-7 border-2 border-amber-400/40 shadow-2xl overflow-hidden">
+              
+              {/* Header Badge & Title */}
+              <div className="text-center space-y-1.5 mb-6">
                 <motion.div
-                  initial={{ scale: 0.5, opacity: 0 }}
+                  initial={{ scale: 0.6, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ type: "spring", duration: 0.8 }}
-                  className="mx-auto w-11 h-11 rounded-full border border-white/15 bg-white/5 flex items-center justify-center relative overflow-hidden shadow-inner"
+                  className="mx-auto w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-amber-400 to-yellow-300 text-emerald-950 flex items-center justify-center font-black text-2xl shadow-lg border-2 border-white/80"
                 >
-                  {/* <!-- SVG_LOGO --> */}
-                  <Sparkles className="w-5 h-5 text-purple-300 relative z-10" />
-                  
-                  {/* Inner lighting effect */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/15 to-transparent opacity-60" />
+                  🌴
                 </motion.div>
 
                 <motion.h1
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/80"
+                  transition={{ delay: 0.15 }}
+                  className="text-xl font-black text-white tracking-tight"
                 >
                   {title}
                 </motion.h1>
@@ -286,8 +186,8 @@ export function Component({
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                  className="text-white/60 text-xs"
+                  transition={{ delay: 0.25 }}
+                  className="text-emerald-200/80 text-xs font-medium leading-relaxed"
                 >
                   {subtitle}
                 </motion.p>
@@ -295,266 +195,139 @@ export function Component({
 
               {/* Login form */}
               <form onSubmit={handleSubmit} className="space-y-4">
-                <motion.div className="space-y-3">
+                <div className="space-y-3">
                   {/* Email input */}
-                  <motion.div 
-                    className={`relative ${focusedInput === "email" ? 'z-10' : ''}`}
-                    whileFocus={{ scale: 1.02 }}
-                    whileHover={{ scale: 1.01 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                  >
-                    <div className="absolute -inset-[0.5px] bg-gradient-to-r from-white/10 via-white/5 to-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                    
-                    <div className="relative flex items-center overflow-hidden rounded-lg">
-                      <Mail className={`absolute left-3 w-4 h-4 transition-all duration-300 ${
-                        focusedInput === "email" ? 'text-white' : 'text-white/40'
+                  <div className="relative">
+                    <div className="relative flex items-center overflow-hidden rounded-xl">
+                      <Mail className={`absolute left-3.5 w-4 h-4 transition-colors ${
+                        focusedInput === "email" ? 'text-amber-400' : 'text-emerald-300/60'
                       }`} />
                       
                       <Input
                         type="email"
-                        placeholder="Email address"
+                        placeholder="ഇമെയിൽ / റേഷൻ കാർഡ് നമ്പർ"
                         value={email}
                         required
                         onChange={(e) => setEmail(e.target.value)}
                         onFocus={() => setFocusedInput("email")}
                         onBlur={() => setFocusedInput(null)}
-                        className="w-full bg-white/5 border-transparent focus:border-white/20 text-white placeholder:text-white/30 h-10 transition-all duration-300 pl-10 pr-3 focus:bg-white/10"
+                        className="pl-10.5 pr-3.5"
                       />
-                      
-                      {/* Input highlight effect */}
-                      {focusedInput === "email" && (
-                        <motion.div 
-                          layoutId="input-highlight"
-                          className="absolute inset-0 bg-white/5 -z-10"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.2 }}
-                        />
-                      )}
                     </div>
-                  </motion.div>
+                  </div>
 
                   {/* Password input */}
-                  <motion.div 
-                    className={`relative ${focusedInput === "password" ? 'z-10' : ''}`}
-                    whileFocus={{ scale: 1.02 }}
-                    whileHover={{ scale: 1.01 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                  >
-                    <div className="absolute -inset-[0.5px] bg-gradient-to-r from-white/10 via-white/5 to-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                    
-                    <div className="relative flex items-center overflow-hidden rounded-lg">
-                      <Lock className={`absolute left-3 w-4 h-4 transition-all duration-300 ${
-                        focusedInput === "password" ? 'text-white' : 'text-white/40'
+                  <div className="relative">
+                    <div className="relative flex items-center overflow-hidden rounded-xl">
+                      <Lock className={`absolute left-3.5 w-4 h-4 transition-colors ${
+                        focusedInput === "password" ? 'text-amber-400' : 'text-emerald-300/60'
                       }`} />
                       
                       <Input
                         type={showPassword ? "text" : "password"}
-                        placeholder="Password"
+                        placeholder="രഹസ്യവാക്ക് / പാസ്‌വേഡ്"
                         value={password}
                         required
                         onChange={(e) => setPassword(e.target.value)}
                         onFocus={() => setFocusedInput("password")}
                         onBlur={() => setFocusedInput(null)}
-                        className="w-full bg-white/5 border-transparent focus:border-white/20 text-white placeholder:text-white/30 h-10 transition-all duration-300 pl-10 pr-10 focus:bg-white/10"
+                        className="pl-10.5 pr-11"
                       />
                       
-                      {/* Toggle password visibility */}
                       <button 
                         type="button"
                         onClick={() => setShowPassword(!showPassword)} 
-                        className="absolute right-3 cursor-pointer p-1 text-white/40 hover:text-white transition-colors duration-300"
+                        className="absolute right-3.5 p-1 text-emerald-300/60 hover:text-amber-300 transition-colors cursor-pointer"
                         aria-label={showPassword ? "Hide password" : "Show password"}
                       >
-                        {showPassword ? (
-                          <Eye className="w-4 h-4" />
-                        ) : (
-                          <EyeClosed className="w-4 h-4" />
-                        )}
+                        {showPassword ? <Eye className="w-4 h-4" /> : <EyeClosed className="w-4 h-4" />}
                       </button>
-                      
-                      {/* Input highlight effect */}
-                      {focusedInput === "password" && (
-                        <motion.div 
-                          layoutId="input-highlight"
-                          className="absolute inset-0 bg-white/5 -z-10"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.2 }}
-                        />
-                      )}
                     </div>
-                  </motion.div>
-                </motion.div>
-
-                {/* Remember me & Forgot password */}
-                <div className="flex items-center justify-between pt-1">
-                  <div className="flex items-center space-x-2">
-                    <div className="relative">
-                      <input
-                        id="remember-me"
-                        name="remember-me"
-                        type="checkbox"
-                        checked={rememberMe}
-                        onChange={() => setRememberMe(!rememberMe)}
-                        className="appearance-none h-4 w-4 rounded border border-white/20 bg-white/5 checked:bg-white checked:border-white focus:outline-none focus:ring-1 focus:ring-white/30 transition-all duration-200"
-                      />
-                      {rememberMe && (
-                        <motion.div 
-                          initial={{ opacity: 0, scale: 0.5 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          className="absolute inset-0 flex items-center justify-center text-black pointer-events-none"
-                        >
-                          {/* <!-- SVG_CHECKMARK --> */}
-                          <Check className="w-3 h-3 stroke-[3]" />
-                        </motion.div>
-                      )}
-                    </div>
-                    <label htmlFor="remember-me" className="text-xs text-white/60 hover:text-white/80 transition-colors duration-200 cursor-pointer">
-                      Remember me
-                    </label>
-                  </div>
-                  
-                  <div className="text-xs relative group/link">
-                    <Link href="/forgot-password" className="text-white/60 hover:text-white transition-colors duration-200">
-                      Forgot password?
-                    </Link>
                   </div>
                 </div>
 
-                {/* Sign in button */}
+                {/* Remember me & Forgot password */}
+                <div className="flex items-center justify-between pt-1 text-xs">
+                  <label className="flex items-center gap-2 cursor-pointer text-emerald-200/80 hover:text-white transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={rememberMe}
+                      onChange={() => setRememberMe(!rememberMe)}
+                      className="h-4 w-4 rounded border-emerald-700 bg-emerald-950/60 text-amber-500 focus:ring-amber-400"
+                    />
+                    <span>ഓർക്കുക (Remember me)</span>
+                  </label>
+                  
+                  <Link href="/forgot-password" className="text-amber-300 hover:text-amber-200 font-semibold transition-colors">
+                    പാസ്‌വേഡ് മറന്നോ?
+                  </Link>
+                </div>
+
+                {/* Sign in button - Kasavu Gold Gradient */}
                 <motion.button
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={isLoading}
-                  className="w-full relative group/button mt-5 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="w-full relative group mt-4 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed py-3 px-4 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-emerald-950 font-black text-sm tracking-wide shadow-lg border-2 border-white/60 transition-all flex items-center justify-center gap-2"
                 >
-                  {/* Button glow effect */}
-                  <div className="absolute inset-0 bg-white/10 rounded-lg blur-lg opacity-0 group-hover/button:opacity-70 transition-opacity duration-300" />
-                  
-                  <div className="relative overflow-hidden bg-white text-black font-semibold h-10 rounded-lg transition-all duration-300 flex items-center justify-center shadow-lg">
-                    {/* Button background animation */}
-                    <motion.div 
-                      className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0 -z-10"
-                      animate={{ 
-                        x: ['-100%', '100%'],
-                      }}
-                      transition={{ 
-                        duration: 1.5, 
-                        ease: "easeInOut", 
-                        repeat: Infinity,
-                        repeatDelay: 1
-                      }}
-                      style={{ 
-                        opacity: isLoading ? 1 : 0,
-                        transition: 'opacity 0.3s ease'
-                      }}
-                    />
-                    
-                    <AnimatePresence mode="wait">
-                      {isLoading ? (
-                        <motion.div
-                          key="loading"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="flex items-center justify-center"
-                        >
-                          <div className="w-4 h-4 border-2 border-black/70 border-t-transparent rounded-full animate-spin" />
-                        </motion.div>
-                      ) : (
-                        <motion.span
-                          key="button-text"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="flex items-center justify-center gap-1.5 text-sm font-semibold"
-                        >
-                          Sign In
-                          <ArrowRight className="w-3.5 h-3.5 group-hover/button:translate-x-1 transition-transform duration-300" />
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                  </div>
+                  <AnimatePresence mode="wait">
+                    {isLoading ? (
+                      <motion.div
+                        key="loading"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="flex items-center justify-center gap-2"
+                      >
+                        <div className="w-4 h-4 border-2 border-emerald-950 border-t-transparent rounded-full animate-spin" />
+                        <span>പരിശോധിക്കുന്നു...</span>
+                      </motion.div>
+                    ) : (
+                      <motion.span
+                        key="button-text"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="flex items-center justify-center gap-1.5"
+                      >
+                        <span>സൈൻ ഇൻ ചെയ്യുക (Sign In)</span>
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
                 </motion.button>
 
                 {/* Minimal Divider */}
-                <div className="relative mt-2 mb-5 flex items-center">
-                  <div className="flex-grow border-t border-white/10"></div>
-                  <motion.span 
-                    className="mx-3 text-xs text-white/40"
-                    initial={{ opacity: 0.7 }}
-                    animate={{ opacity: [0.7, 0.9, 0.7] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    or
-                  </motion.span>
-                  <div className="flex-grow border-t border-white/10"></div>
+                <div className="relative my-4 flex items-center">
+                  <div className="flex-grow border-t border-emerald-800/80"></div>
+                  <span className="mx-3 text-[11px] font-bold text-emerald-400/60 uppercase">അല്ലെങ്കിൽ</span>
+                  <div className="flex-grow border-t border-emerald-800/80"></div>
                 </div>
 
-                {/* Google Sign In */}
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                {/* Citizen e-Sevanam / Google Sign In */}
+                <button
                   type="button"
                   onClick={() => {
                     setIsLoading(true);
                     setTimeout(() => {
                       setIsLoading(false);
-                      if (onSuccess) onSuccess({ email: 'google.citizen@kerala.gov.in' });
-                    }, 1200);
+                      if (onSuccess) onSuccess({ email: 'citizen.kerala@nic.in' });
+                    }, 1000);
                   }}
-                  className="w-full relative group/google cursor-pointer"
+                  className="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs border border-white/20 transition-all flex items-center justify-center gap-2.5 cursor-pointer"
                 >
-                  <div className="absolute inset-0 bg-white/5 rounded-lg blur opacity-0 group-hover/google:opacity-70 transition-opacity duration-300" />
-                  
-                  <div className="relative overflow-hidden bg-white/5 text-white font-medium h-10 rounded-lg border border-white/10 hover:border-white/20 transition-all duration-300 flex items-center justify-center gap-2.5">
-                    {/* <!-- SVG_GOOGLE_LOGO --> */}
-                    <svg className="w-4 h-4" viewBox="0 0 24 24">
-                      <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/>
-                      <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/>
-                      <path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.8s.2-2.1.4-2.8L1.9 6.3C.7 8.7 0 11.2 0 14s.7 5.3 1.9 7.7l3.7-2.9z"/>
-                      <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2-6.4-4.8L1.9 16.4C3.7 20.4 7.5 23 12 23z"/>
-                    </svg>
-                    
-                    <span className="text-white/80 group-hover/google:text-white transition-colors text-xs font-medium">
-                      Sign in with Google
-                    </span>
-                    
-                    {/* Button hover effect */}
-                    <motion.div 
-                      className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0"
-                      initial={{ x: '-100%' }}
-                      whileHover={{ x: '100%' }}
-                      transition={{ 
-                        duration: 1, 
-                        ease: "easeInOut"
-                      }}
-                    />
-                  </div>
-                </motion.button>
+                  <ShieldCheck className="w-4 h-4 text-amber-400" />
+                  <span>കേരള സിംഗിൾ സൈൻ ഓൺ (e-Sevanam SSO)</span>
+                </button>
 
                 {/* Sign up link */}
-                <motion.p 
-                  className="text-center text-xs text-white/60 mt-4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.5 }}
-                >
-                  Don't have an account?{' '}
-                  <Link 
-                    href="/signup" 
-                    className="relative inline-block group/signup"
-                  >
-                    <span className="relative z-10 text-white group-hover/signup:text-white/70 transition-colors duration-300 font-medium">
-                      Sign up
-                    </span>
-                    <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white group-hover/signup:w-full transition-all duration-300" />
+                <p className="text-center text-xs text-emerald-200/70 mt-3 pt-2 border-t border-emerald-900/60">
+                  അക്കൗണ്ട് ഇല്ലേ?{' '}
+                  <Link href="/signup" className="text-amber-400 hover:text-amber-300 font-bold underline transition-colors">
+                    രജിസ്റ്റർ ചെയ്യുക (Register)
                   </Link>
-                </motion.p>
+                </p>
               </form>
             </div>
           </div>
