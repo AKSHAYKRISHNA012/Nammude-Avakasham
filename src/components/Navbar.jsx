@@ -1,5 +1,5 @@
 import React from 'react';
-import { Volume2, Eye, HelpCircle, HeartPulse, PhoneCall, Sparkles } from 'lucide-react';
+import { Volume2, Eye, HelpCircle, HeartPulse, PhoneCall, Sparkles, LogIn } from 'lucide-react';
 import { speakText } from '../utils/speech.js';
 
 export default function Navbar({
@@ -13,7 +13,8 @@ export default function Navbar({
   setActiveScreen,
   currentMode,
   setCurrentMode,
-  onOpenJargonModal
+  onOpenJargonModal,
+  onOpenAuthModal
 }) {
   const toggleLanguage = () => {
     setLanguage(prev => (prev === 'ml' ? 'en' : 'ml'));
@@ -162,6 +163,16 @@ export default function Navbar({
               }`}
             >
               <Eye className="w-4 h-4" />
+            </button>
+
+            {/* Sign In / Auth Button */}
+            <button
+              onClick={onOpenAuthModal}
+              title={language === 'ml' ? 'പോർട്ടൽ ലോഗിൻ (Sign In)' : 'Citizen / Officer Sign In'}
+              className="p-2 sm:px-3 sm:py-2 text-xs font-bold rounded-xl bg-purple-950/80 hover:bg-purple-900 text-purple-200 border border-purple-500/50 transition-all flex items-center gap-1.5 shadow-sm active:scale-95"
+            >
+              <LogIn className="w-4 h-4 text-purple-300" />
+              <span className="hidden sm:inline">{language === 'ml' ? 'ലോഗിൻ' : 'Sign In'}</span>
             </button>
 
             {/* Language Switcher Button with Gradient Glow */}

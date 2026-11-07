@@ -22,6 +22,10 @@ import VaidyaDoctorVisit from './components/voicevaidya/VaidyaDoctorVisit.jsx';
 import VaidyaCaregiver from './components/voicevaidya/VaidyaCaregiver.jsx';
 import VaidyaMedicalHistory from './components/voicevaidya/VaidyaMedicalHistory.jsx';
 
+// UI Primitives & Demo (shadcn)
+import { Component as SignInCard } from '@/components/ui/sign-in-card-2';
+import { DemoOne } from '@/components/ui/demo';
+
 import { 
   Home, 
   Mic, 
@@ -48,6 +52,7 @@ export default function App() {
   const [selectedSchemeId, setSelectedSchemeId] = useState('ignaoap');
   const [isJargonModalOpen, setIsJargonModalOpen] = useState(false);
   const [isLegalModalOpen, setIsLegalModalOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   // Font size multiplier class
   const fontSizeClasses = {
@@ -100,6 +105,7 @@ export default function App() {
         currentMode={currentMode}
         setCurrentMode={setCurrentMode}
         onOpenJargonModal={() => setIsJargonModalOpen(true)}
+        onOpenAuthModal={() => setIsAuthOpen(true)}
       />
 
       {/* Mode Switch Banner for Mobile Screens */}
@@ -245,6 +251,11 @@ export default function App() {
           />
         )}
 
+        {/* Demo view for Sign-In Card 2 */}
+        {activeScreen === 'auth_demo' && (
+          <DemoOne />
+        )}
+
         {/* Global Compliance & Trust Footer */}
         <footer className="max-w-5xl mx-auto px-4 pt-12 pb-4 text-center text-xs text-gray-500 space-y-2 border-t border-gray-200/60 mt-12">
           <div className="flex flex-wrap items-center justify-center gap-4 font-bold text-gray-600">
@@ -313,6 +324,21 @@ export default function App() {
         onClose={() => setIsLegalModalOpen(false)}
         language={language}
       />
+
+      {/* 3D Sign In Card Modal */}
+      {isAuthOpen && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <SignInCard
+            title={language === 'ml' ? 'നമ്മുടെ അവകാശം ലോഗിൻ' : 'Nammude Avakasham'}
+            subtitle={language === 'ml' ? 'ക്ഷേമ & ആരോഗ്യ സേവനങ്ങൾക്കായി സൈൻ ഇൻ ചെയ്യുക' : 'Sign in to access your welfare & health services'}
+            onClose={() => setIsAuthOpen(false)}
+            onSuccess={(user) => {
+              alert(language === 'ml' ? `ലോഗിൻ വിജയകരം: ${user.email}` : `Sign in successful for ${user.email}`);
+              setIsAuthOpen(false);
+            }}
+          />
+        </div>
+      )}
 
     </div>
   );
