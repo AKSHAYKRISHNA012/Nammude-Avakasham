@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Navbar from './components/Navbar.jsx';
 import LandingPage from './components/LandingPage.jsx';
 import WelcomeScreen from './components/WelcomeScreen.jsx';
@@ -46,7 +46,9 @@ import {
   HeartPulse,
   Sparkles,
   Scale,
-  Building2
+  Building2,
+  MoreHorizontal,
+  X
 } from 'lucide-react';
 
 export default function App() {
@@ -60,6 +62,21 @@ export default function App() {
   const [isJargonModalOpen, setIsJargonModalOpen] = useState(false);
   const [isLegalModalOpen, setIsLegalModalOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const morePanelRef = useRef(null);
+
+  // Close "More" panel on outside click
+  useEffect(() => {
+    if (!isMoreOpen) return;
+    const handler = (e) => {
+      if (morePanelRef.current && !morePanelRef.current.contains(e.target)) {
+        setIsMoreOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [isMoreOpen]);
 
   // Toggle Senior Citizen Assistance Mode
   const toggleSeniorMode = () => {
@@ -352,32 +369,115 @@ export default function App() {
           </main>
 
           {/* Floating Island Bottom Dock for Application Navigation */}
-          <div className="fixed bottom-4 left-0 right-0 z-40 px-3 pointer-events-none">
+          <div className="fixed bottom-4 left-0 right-0 z-40 px-3 pointer-events-none" ref={morePanelRef}>
+
+            {/* "More" overflow panel */}
+            {isMoreOpen && currentMode !== 'vaidya' && (
+              <div className="pointer-events-auto max-w-xl sm:max-w-2xl mx-auto mb-2 floating-dock rounded-3xl border-2 border-white/80 shadow-elevated px-4 py-3">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-black text-stone-500 uppercase tracking-wider">
+                    {language === 'ml' ? 'കൂടുതൽ ഫീച്ചറുകൾ' : 'More Features'}
+                  </span>
+                  <button onClick={() => setIsMoreOpen(false)} className="p-1 rounded-xl hover:bg-stone-100 text-stone-400">
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+                <div className="grid grid-cols-4 gap-1">
+                  {rightsNavItems.slice(5).map((item) => {
+                    const Icon = item.icon;
+                    const isActive = activeScreen === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => { setActiveScreen(item.id); setIsMoreOpen(false); }}
+                        className={`flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl transition-all ${
+                          isActive ? 'bg-emerald-100 text-emerald-900 font-black' : 'text-stone-500 hover:text-emerald-800 hover:bg-stone-50'
+                        }`}
+                      >
+                        <Icon className="w-5 h-5 mb-1" />
+                        <span className="text-[10px] font-extrabold text-center leading-tight">
+                          {language === 'ml' ? item.label_ml : item.label_en}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             <nav className="pointer-events-auto floating-dock rounded-3xl max-w-xl sm:max-w-2xl mx-auto px-3 py-2 flex items-center justify-around border-2 border-white/80 shadow-elevated">
-              {currentNavItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = activeScreen === item.id;
-                return (
+              {/* Show first 5 primary items + highlight CTA + More button for rights mode */}
+              {/* VoiceVaidya dock: show all 7 items (they fit) */}
+              {currentMode === 'vaidya' ? (
+                currentNavItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeScreen === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => setActiveScreen(item.id)}
+                      className={`flex flex-col items-center justify-center py-1.5 px-2 rounded-2xl transition-all relative ${
+                        isActive ? 'text-emerald-950 font-black scale-108' : 'text-stone-500 hover:text-emerald-800'
+                      } ${item.highlight ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-emerald-950 font-black px-3 shadow-md ring-2 ring-amber-300/60 scale-105' : ''}`}
+                      title={language === 'ml' ? item.label_ml : item.label_en}
+                    >
+                      <Icon className={`w-5 h-5 ${isActive && !item.highlight ? 'text-emerald-800 stroke-[2.8]' : ''}`} />
+                      <span className="text-[10px] mt-0.5 tracking-tight font-extrabold truncate max-w-[52px] text-center">
+                        {language === 'ml' ? item.label_ml : item.label_en}
+                      </span>
+                      {isActive && !item.highlight && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-800 mt-0.5 shadow-sm"></span>
+                      )}
+                    </button>
+                  );
+                })
+              ) : (
+                <>
+                  {/* Primary 5 rights items */}
+                  {rightsNavItems.slice(0, 5).map((item) => {
+                    const Icon = item.icon;
+                    const isActive = activeScreen === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => setActiveScreen(item.id)}
+                        className={`flex flex-col items-center justify-center py-1.5 px-2.5 rounded-2xl transition-all relative ${
+                          isActive ? 'text-emerald-950 font-black scale-108' : 'text-stone-500 hover:text-emerald-800'
+                        } ${item.highlight ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-emerald-950 font-black px-4 shadow-md ring-2 ring-amber-300/60 scale-105' : ''}`}
+                        title={language === 'ml' ? item.label_ml : item.label_en}
+                      >
+                        <Icon className={`w-5 h-5 ${isActive && !item.highlight ? 'text-emerald-800 stroke-[2.8]' : ''}`} />
+                        <span className="text-[10px] sm:text-[11px] mt-0.5 tracking-tight font-extrabold truncate max-w-[52px] text-center">
+                          {language === 'ml' ? item.label_ml : item.label_en}
+                        </span>
+                        {isActive && !item.highlight && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-800 mt-0.5 shadow-sm"></span>
+                        )}
+                      </button>
+                    );
+                  })}
+                  {/* More button */}
                   <button
-                    key={item.id}
-                    onClick={() => setActiveScreen(item.id)}
+                    onClick={() => setIsMoreOpen(prev => !prev)}
                     className={`flex flex-col items-center justify-center py-1.5 px-2.5 rounded-2xl transition-all relative ${
-                      isActive
-                        ? 'text-emerald-950 font-black scale-108'
-                        : 'text-stone-500 hover:text-emerald-800'
-                    } ${item.highlight ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-emerald-950 font-black px-4 shadow-md ring-2 ring-amber-300/60 scale-105' : ''}`}
-                    title={language === 'ml' ? item.label_ml : item.label_en}
+                      isMoreOpen
+                        ? 'text-emerald-900 bg-emerald-100 font-black'
+                        : rightsNavItems.slice(5).some(i => i.id === activeScreen)
+                          ? 'text-emerald-900 font-black scale-108'
+                          : 'text-stone-500 hover:text-emerald-800'
+                    }`}
+                    title={language === 'ml' ? 'കൂടുതൽ' : 'More'}
                   >
-                    <Icon className={`w-5 h-5 ${isActive && !item.highlight ? 'text-emerald-800 stroke-[2.8]' : ''}`} />
-                    <span className="text-[10px] sm:text-[11px] mt-0.5 tracking-tight font-extrabold truncate max-w-[65px] text-center">
-                      {language === 'ml' ? item.label_ml : item.label_en}
+                    <MoreHorizontal className="w-5 h-5" />
+                    <span className="text-[10px] sm:text-[11px] mt-0.5 tracking-tight font-extrabold">
+                      {language === 'ml' ? 'കൂടുതൽ' : 'More'}
                     </span>
-                    {isActive && !item.highlight && (
+                    {rightsNavItems.slice(5).some(i => i.id === activeScreen) && !isMoreOpen && (
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-800 mt-0.5 shadow-sm"></span>
                     )}
                   </button>
-                );
-              })}
+                </>
+              )}
             </nav>
           </div>
         </>

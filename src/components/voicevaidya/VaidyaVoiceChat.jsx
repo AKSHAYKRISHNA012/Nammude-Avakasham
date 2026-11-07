@@ -247,6 +247,16 @@ export default function VaidyaVoiceChat({ language }) {
         </button>
       </div>
 
+      {/* AI Transparency Disclosure Banner */}
+      <div className="mb-3 px-4 py-2.5 rounded-2xl bg-blue-50 border border-blue-200 flex items-start gap-2.5">
+        <span className="text-blue-500 text-base flex-shrink-0 mt-0.5">ℹ️</span>
+        <p className="text-xs text-blue-800 font-medium leading-relaxed">
+          {language === 'ml'
+            ? 'AI ഉത്പാദിത ആരോഗ്യ ഉപദേശം — ഔദ്യോഗിക മെഡിക്കൽ അഭിപ്രായമല്ല. അടിയന്തിര ഘട്ടത്തിൽ 108 / 112 വിളിക്കുക.'
+            : 'AI-generated health guidance only — not official medical advice. For emergencies, call 108 or 112.'}
+        </p>
+      </div>
+
       {/* Emergency Alert Banner if triggered */}
       {emergencyAlert && (
         <div className="mb-4 p-5 rounded-3xl bg-rose-600 text-white shadow-xl animate-pulse flex items-start justify-between gap-4 border-2 border-yellow-300">
