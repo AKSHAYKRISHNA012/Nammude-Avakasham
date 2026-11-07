@@ -4,6 +4,11 @@
 > **"Digital Empowerment for Every Keralite"**  
 > An accessible, bilingual public service platform empowering senior citizens and differently-abled individuals in Kerala with AI rights navigation, prescription understanding, and voice healthcare guidance.
 
+[![Live Demo on GitHub Pages](https://img.shields.io/badge/Live_Demo-GitHub_Pages-2ea44f?style=for-the-badge&logo=github)](https://akshaykrishna012.github.io/Nammude-Avakasham/)
+[![CI Deployment](https://github.com/AKSHAYKRISHNA012/Nammude-Avakasham/actions/workflows/deploy.yml/badge.svg)](https://github.com/AKSHAYKRISHNA012/Nammude-Avakasham/actions/workflows/deploy.yml)
+
+🌐 **Live Website Link**: [https://akshaykrishna012.github.io/Nammude-Avakasham/](https://akshaykrishna012.github.io/Nammude-Avakasham/)
+
 ---
 
 ## 🌟 Executive Overview
