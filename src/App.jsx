@@ -10,6 +10,8 @@ import ApplicationCompanion from './components/ApplicationCompanion.jsx';
 import ApplicationTracking from './components/ApplicationTracking.jsx';
 import HumanAssistance from './components/HumanAssistance.jsx';
 import JargonBusterModal from './components/JargonBusterModal.jsx';
+import LegalModal from './components/common/LegalModal.jsx';
+import NetworkResilienceBanner from './components/common/NetworkResilienceBanner.jsx';
 
 // VoiceVaidya Components
 import VoiceVaidyaHome from './components/voicevaidya/VoiceVaidyaHome.jsx';
@@ -45,6 +47,7 @@ export default function App() {
   const [activeScreen, setActiveScreen] = useState('vaidya_home'); // initial screen
   const [selectedSchemeId, setSelectedSchemeId] = useState('ignaoap');
   const [isJargonModalOpen, setIsJargonModalOpen] = useState(false);
+  const [isLegalModalOpen, setIsLegalModalOpen] = useState(false);
 
   // Font size multiplier class
   const fontSizeClasses = {
@@ -81,6 +84,9 @@ export default function App() {
   return (
     <div className={`min-h-screen flex flex-col transition-colors ${highContrast ? 'high-contrast' : 'bg-[#FAF8F5] text-gray-900'} ${fontSizeClasses[fontSize]}`}>
       
+      {/* Network Resilience & Offline Sync Banner */}
+      <NetworkResilienceBanner language={language} />
+
       {/* Top Glassmorphic Navbar */}
       <Navbar
         language={language}
@@ -238,6 +244,30 @@ export default function App() {
             language={language}
           />
         )}
+
+        {/* Global Compliance & Trust Footer */}
+        <footer className="max-w-5xl mx-auto px-4 pt-12 pb-4 text-center text-xs text-gray-500 space-y-2 border-t border-gray-200/60 mt-12">
+          <div className="flex flex-wrap items-center justify-center gap-4 font-bold text-gray-600">
+            <button onClick={() => setIsLegalModalOpen(true)} className="hover:text-emerald-800 transition-colors">
+              {language === 'ml' ? 'സ്വകാര്യതാ നയം (DPDP 2023)' : 'Privacy Policy (DPDP Act)'}
+            </button>
+            <span>•</span>
+            <button onClick={() => setIsLegalModalOpen(true)} className="hover:text-emerald-800 transition-colors">
+              {language === 'ml' ? 'സേവന വ്യവസ്ഥകൾ' : 'Terms of Service'}
+            </button>
+            <span>•</span>
+            <button onClick={() => setIsLegalModalOpen(true)} className="hover:text-emerald-800 transition-colors">
+              {language === 'ml' ? 'കുക്കി മുൻഗണനകൾ' : 'Cookie Preferences'}
+            </button>
+            <span>•</span>
+            <button onClick={() => setIsLegalModalOpen(true)} className="hover:text-emerald-800 transition-colors">
+              {language === 'ml' ? 'ആക്സസിബിലിറ്റി (WCAG 2.1 AA)' : 'Accessibility Statement'}
+            </button>
+          </div>
+          <p className="text-[11px] text-gray-400">
+            © 2026 Nammude Avakasham & VoiceVaidya. Powered by Antigravity Pro Swarm. Zero Client Secrets Enclave.
+          </p>
+        </footer>
       </main>
 
       {/* Modern Floating Island Bottom Dock */}
@@ -274,6 +304,13 @@ export default function App() {
       <JargonBusterModal
         isOpen={isJargonModalOpen}
         onClose={() => setIsJargonModalOpen(false)}
+        language={language}
+      />
+
+      {/* Legal & Compliance Modal */}
+      <LegalModal
+        isOpen={isLegalModalOpen}
+        onClose={() => setIsLegalModalOpen(false)}
         language={language}
       />
 
