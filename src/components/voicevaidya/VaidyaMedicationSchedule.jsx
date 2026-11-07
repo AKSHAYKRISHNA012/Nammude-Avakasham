@@ -96,6 +96,9 @@ export default function VaidyaMedicationSchedule({ language, onNotifyCaregiver }
 
       {/* Header Banner with Adherence Metric */}
       <div className="glass-card rounded-3xl p-6 sm:p-8 shadow-soft border-2 border-teal-100">
+        <div className="mb-4 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold border border-amber-300">
+          <span>ℹ️ {language === 'ml' ? 'മാതൃകാ ക്ലിനിക്കൽ പ്രൊഫൈൽ / Sample Profile for Demonstration' : 'Illustrative Clinical Profile for Demonstration'}</span>
+        </div>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-100 text-teal-900 text-xs font-black mb-2 shadow-sm">

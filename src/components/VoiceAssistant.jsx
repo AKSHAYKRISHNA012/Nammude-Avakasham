@@ -202,6 +202,16 @@ export default function VoiceAssistant({ language, setActiveScreen }) {
         </button>
       </div>
 
+      {/* AI Transparency & Safe Advice Notice */}
+      <div className="p-3 bg-amber-50/90 rounded-2xl border border-amber-200 text-xs text-amber-950 flex items-center gap-2">
+        <Sparkles className="w-4 h-4 text-amber-700 shrink-0" />
+        <span className="leading-snug">
+          {language === 'ml' 
+            ? 'ℹ️ ഔദ്യോഗിക സർക്കാർ ചട്ടങ്ങൾ അടിസ്ഥാനമാക്കി AI നൽകുന്ന മാർഗ്ഗനിർദ്ദേശം. അന്തിമ തീരുമാനത്തിനായി അടുത്തുള്ള അക്ഷയ കേന്ദ്രവുമായോ പഞ്ചായത്ത് ഓഫീസുമായോ ബന്ധപ്പെടുക.' 
+            : 'ℹ️ AI-generated guidance based on official scheme rules. Not an official legal sanction. Verify details with your local Akshaya / Panchayat office.'}
+        </span>
+      </div>
+
       {/* Chat Messages */}
       <div className="flex-1 overflow-y-auto space-y-4 p-5 bg-white/60 backdrop-blur-md rounded-3xl border border-emerald-100 shadow-inner">
         {messages.map((msg) => {

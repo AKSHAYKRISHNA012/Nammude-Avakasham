@@ -22,9 +22,14 @@ export default function VaidyaMedicalHistory({ language }) {
       
       {/* Title Header */}
       <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-teal-100">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-100 text-teal-900 text-xs font-bold mb-2">
-          <FileHeart className="w-4 h-4 text-teal-700" />
-          <span>{language === 'ml' ? 'ആരോഗ്യ ചരിത്ര രേഖകൾ' : 'Personal Medical History'}</span>
+        <div className="flex flex-wrap items-center gap-2 mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-100 text-teal-900 text-xs font-bold">
+            <FileHeart className="w-4 h-4 text-teal-700" />
+            <span>{language === 'ml' ? 'ആരോഗ്യ ചരിത്ര രേഖകൾ' : 'Personal Medical History'}</span>
+          </div>
+          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
+            ℹ️ {language === 'ml' ? 'മാതൃകാ ക്ലിനിക്കൽ പ്രൊഫൈൽ / Sample Profile' : 'Sample Clinical Profile'}
+          </span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
           {language === 'ml' ? 'ആരോഗ്യ ചരിത്രവും അലർജി വിവരങ്ങളും' : 'Health History, Conditions & Allergies'}

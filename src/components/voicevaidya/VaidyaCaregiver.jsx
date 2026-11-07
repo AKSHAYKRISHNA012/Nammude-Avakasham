@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Users, 
   PhoneCall, 
@@ -9,22 +9,79 @@ import {
   Check, 
   MessageCircle,
   Lock,
-  HeartHandshake
+  HeartHandshake,
+  Plus,
+  Trash2,
+  Info
 } from 'lucide-react';
-import { CAREGIVER_PROFILE } from '../../data/vaidyaData.js';
 
 export default function VaidyaCaregiver({ language }) {
-  const [caregiver, setCaregiver] = useState(CAREGIVER_PROFILE);
-  const [permissions, setPermissions] = useState(CAREGIVER_PROFILE.permissions);
+  const [caregiver, setCaregiver] = useState(() => {
+    try {
+      const saved = localStorage.getItem('vaidya_caregiver');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [isAdding, setIsAdding] = useState(false);
+  const [formName, setFormName] = useState('');
+  const [formRelation, setFormRelation] = useState('');
+  const [formPhone, setFormPhone] = useState('');
   const [saveSuccess, setSaveSuccess] = useState(false);
 
-  const togglePermission = (key) => {
-    setPermissions(prev => ({
-      ...prev,
-      [key]: !prev[key]
-    }));
+  const loadSampleCaregiver = () => {
+    const sample = {
+      name: "രാഹുൽ നായർ (Rahul Nair)",
+      relationship_ml: "മകൻ (Son)",
+      relationship_en: "Son",
+      phone: "+91 98471 23456",
+      isSample: true,
+      permissions: {
+        missedDoseAlerts: true,
+        prescriptionUpload: true,
+        viewVisitSummary: true
+      }
+    };
+    setCaregiver(sample);
+    try {
+      localStorage.setItem('vaidya_caregiver', JSON.stringify(sample));
+    } catch (e) {}
+  };
+
+  const handleSaveCustom = (e) => {
+    e.preventDefault();
+    if (!formName.trim() || !formPhone.trim()) return;
+
+    const newCaregiver = {
+      name: formName.trim(),
+      relationship_ml: formRelation.trim() || 'കുടുംബാംഗം',
+      relationship_en: formRelation.trim() || 'Family Member',
+      phone: formPhone.trim(),
+      isSample: false,
+      permissions: {
+        missedDoseAlerts: true,
+        prescriptionUpload: true,
+        viewVisitSummary: true
+      }
+    };
+
+    setCaregiver(newCaregiver);
+    try {
+      localStorage.setItem('vaidya_caregiver', JSON.stringify(newCaregiver));
+    } catch (err) {}
+
+    setIsAdding(false);
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 2500);
+  };
+
+  const handleRemoveCaregiver = () => {
+    setCaregiver(null);
+    try {
+      localStorage.removeItem('vaidya_caregiver');
+    } catch (e) {}
   };
 
   return (
@@ -46,144 +103,142 @@ export default function VaidyaCaregiver({ language }) {
         </p>
       </div>
 
-      {/* Connected Caregiver Profile Card */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-teal-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-        <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-3xl bg-teal-700 text-white flex items-center justify-center font-black text-2xl shadow">
+      {/* When no caregiver configured */}
+      {!caregiver && !isAdding && (
+        <div className="bg-white rounded-3xl p-10 text-center border-2 border-dashed border-stone-200 space-y-4">
+          <div className="w-16 h-16 rounded-full bg-teal-50 text-teal-800 flex items-center justify-center mx-auto text-2xl">
             👨‍👦
           </div>
           <div className="space-y-1">
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-teal-100 text-teal-800">
-              {language === 'ml' ? 'അംഗീകൃത കുടുംബാംഗം' : 'Authorized Caregiver'}
-            </span>
-            <h3 className="text-xl font-extrabold text-gray-900">{caregiver.name}</h3>
-            <p className="text-xs sm:text-sm text-gray-600">
-              {language === 'ml' ? caregiver.relationship_ml : caregiver.relationship_en} | {caregiver.location}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <a
-            href={`tel:${caregiver.phone.replace(/\s+/g, '')}`}
-            className="px-5 py-3 rounded-2xl bg-teal-700 hover:bg-teal-800 text-white font-black text-xs shadow flex items-center gap-2 transition-transform active:scale-95"
-          >
-            <PhoneCall className="w-4 h-4" />
-            <span>{language === 'ml' ? 'വിളിക്കുക' : 'Call Caregiver'}</span>
-          </a>
-        </div>
-      </div>
-
-      {/* Permission & Privacy Controls */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-sm space-y-6">
-        <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-          <div>
-            <h3 className="text-lg font-extrabold text-gray-900 flex items-center gap-2">
-              <Lock className="w-5 h-5 text-teal-700" />
-              <span>{language === 'ml' ? 'സമ്മതവും സ്വകാര്യതാ നിയന്ത്രണങ്ങളും:' : 'Consent & Privacy Settings:'}</span>
+            <h3 className="font-extrabold text-lg text-stone-900">
+              {language === 'ml' ? 'കെയർഗിവർ വിവരങ്ങൾ ചേർത്തിട്ടില്ല' : 'No Caregiver Linked Yet'}
             </h3>
-            <p className="text-xs text-gray-500 mt-0.5">
-              {language === 'ml' ? 'നിങ്ങൾക്ക് ആവശ്യമുള്ള വിവരങ്ങൾ മാത്രം പങ്കുവെക്കാം' : 'Control what information your caregiver can view or receive'}
+            <p className="text-xs text-stone-500 max-w-md mx-auto leading-relaxed">
+              {language === 'ml'
+                ? 'നിങ്ങളുടെ മരുന്ന് സമയങ്ങൾ ശ്രദ്ധിക്കാൻ മകന്റെയോ മകളുടെയോ മറ്റ് കുടുംബാംഗങ്ങളുടെയോ ഫോൺ നമ്പർ ചേർക്കാവുന്നതാണ്.'
+                : 'Link a family member or trusted caregiver to receive automated missed dose reminders.'}
             </p>
           </div>
 
-          {saveSuccess && (
-            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-              {language === 'ml' ? 'മാറ്റങ്ങൾ രേഖപ്പെടുത്തി ✓' : 'Settings Updated ✓'}
-            </span>
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <button
+              onClick={() => setIsAdding(true)}
+              className="px-6 py-3 rounded-2xl bg-teal-700 hover:bg-teal-800 text-white font-extrabold text-xs sm:text-sm flex items-center gap-2 shadow-sm transition-transform active:scale-95"
+            >
+              <Plus className="w-4 h-4" />
+              <span>{language === 'ml' ? 'പുതിയ കെയർഗിവറെ ചേർക്കുക' : 'Add Caregiver Contact'}</span>
+            </button>
+
+            <button
+              onClick={loadSampleCaregiver}
+              className="px-4 py-3 rounded-2xl bg-teal-50 hover:bg-teal-100 text-teal-900 font-bold text-xs border border-teal-200 transition-colors"
+            >
+              {language === 'ml' ? '⚡ മാതൃകാ പ്രൊഫൈൽ നൽകുക (Load Demo)' : '⚡ Load Sample Profile'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Caregiver Add Form Modal / Inline Card */}
+      {isAdding && (
+        <form onSubmit={handleSaveCustom} className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-teal-300 shadow-sm space-y-4">
+          <h3 className="font-extrabold text-base text-gray-900">
+            {language === 'ml' ? 'വിശ്വസ്ത കെയർഗിവറുടെ വിവരങ്ങൾ നൽകുക' : 'Add Caregiver Contact Details'}
+          </h3>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+            <div>
+              <label className="block font-bold text-gray-700 mb-1">{language === 'ml' ? 'പേര്' : 'Name'} *</label>
+              <input
+                type="text"
+                required
+                value={formName}
+                onChange={(e) => setFormName(e.target.value)}
+                placeholder="e.g. Rahul Nair"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 font-semibold focus:outline-none focus:ring-2 focus:ring-teal-600"
+              />
+            </div>
+
+            <div>
+              <label className="block font-bold text-gray-700 mb-1">{language === 'ml' ? 'ബന്ധം' : 'Relationship'}</label>
+              <input
+                type="text"
+                value={formRelation}
+                onChange={(e) => setFormRelation(e.target.value)}
+                placeholder="e.g. മകൻ (Son)"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 font-semibold focus:outline-none focus:ring-2 focus:ring-teal-600"
+              />
+            </div>
+
+            <div>
+              <label className="block font-bold text-gray-700 mb-1">{language === 'ml' ? 'ഫോൺ നമ്പർ' : 'Phone Number'} *</label>
+              <input
+                type="tel"
+                required
+                value={formPhone}
+                onChange={(e) => setFormPhone(e.target.value)}
+                placeholder="e.g. 98471 23456"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 font-semibold focus:outline-none focus:ring-2 focus:ring-teal-600"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-3 pt-3">
+            <button
+              type="button"
+              onClick={() => setIsAdding(false)}
+              className="px-4 py-2 rounded-xl text-stone-600 text-xs font-bold hover:bg-stone-100"
+            >
+              {language === 'ml' ? 'റദ്ദാക്കുക' : 'Cancel'}
+            </button>
+            <button
+              type="submit"
+              className="px-6 py-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-extrabold text-xs shadow-sm"
+            >
+              {language === 'ml' ? 'സേവ് ചെയ്യുക' : 'Save Caregiver'}
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* Connected Caregiver Profile Card */}
+      {caregiver && (
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-teal-200 shadow-sm space-y-6">
+          {caregiver.isSample && (
+            <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 font-bold flex items-center gap-2">
+              <Info className="w-4 h-4 text-amber-700" />
+              <span>{language === 'ml' ? 'മാതൃകാ കെയർഗിവർ പ്രൊഫൈൽ / Sample Profile for Demonstration' : 'Illustrative Caregiver Profile'}</span>
+            </div>
           )}
+
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-3xl bg-teal-700 text-white flex items-center justify-center font-black text-2xl shadow">
+                👨‍👦
+              </div>
+              <div className="space-y-1">
+                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-teal-100 text-teal-800">
+                  {language === 'ml' ? 'അംഗീകൃത കുടുംബാംഗം' : 'Authorized Caregiver'}
+                </span>
+                <h3 className="text-xl font-extrabold text-gray-900">{caregiver.name}</h3>
+                <p className="text-xs sm:text-sm text-gray-600">
+                  {caregiver.relationship_ml} • {caregiver.phone}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleRemoveCaregiver}
+                className="px-3.5 py-2 rounded-xl text-xs font-bold text-red-600 hover:bg-red-50 border border-red-200 flex items-center gap-1.5 transition-colors"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>{language === 'ml' ? 'നീക്കം ചെയ്യുക' : 'Remove'}</span>
+              </button>
+            </div>
+          </div>
         </div>
-
-        <div className="space-y-4">
-          
-          {/* Toggle 1: Missed Dose Alerts */}
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-200">
-            <div className="space-y-0.5 pr-4">
-              <h4 className="font-extrabold text-sm text-gray-900">
-                {language === 'ml' ? 'മരുന്ന് ഒഴിവാക്കിയാൽ അറിയിപ്പ് നൽകുക' : 'Missed Medication Alerts (WhatsApp / SMS)'}
-              </h4>
-              <p className="text-xs text-gray-600">
-                {language === 'ml' 
-                  ? 'നിശ്ചിത സമയത്ത് മരുന്ന് കഴിച്ചില്ലെങ്കിൽ കുടുംബാംഗത്തിന് സന്ദേശം പോകുന്നു.' 
-                  : 'Sends an alert to caregiver only when a scheduled dose is skipped or unrecorded.'}
-              </p>
-            </div>
-            <button
-              onClick={() => togglePermission('missedDoseAlerts')}
-              className={`w-12 h-7 rounded-full transition-colors relative flex-shrink-0 ${
-                permissions.missedDoseAlerts ? 'bg-teal-700' : 'bg-gray-300'
-              }`}
-            >
-              <span className={`w-5 h-5 rounded-full bg-white absolute top-1 transition-transform ${
-                permissions.missedDoseAlerts ? 'right-1' : 'left-1'
-              }`} />
-            </button>
-          </div>
-
-          {/* Toggle 2: Caregiver Prescription Upload */}
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-200">
-            <div className="space-y-0.5 pr-4">
-              <h4 className="font-extrabold text-sm text-gray-900">
-                {language === 'ml' ? 'കുടുംബാംഗത്തിന് കുറിപ്പടി അപ്‌ലോഡ് ചെയ്യാം' : 'Allow Caregiver to Upload Prescriptions'}
-              </h4>
-              <p className="text-xs text-gray-600">
-                {language === 'ml' 
-                  ? 'നിങ്ങൾക്ക് പകരം കുടുംബാംഗത്തിന് ഫോണിൽ നിന്ന് കുറിപ്പടി ചേർക്കാൻ അനുവാദം നൽകുന്നു.' 
-                  : 'Empowers family member to upload prescriptions remotely on your behalf.'}
-              </p>
-            </div>
-            <button
-              onClick={() => togglePermission('prescriptionUpload')}
-              className={`w-12 h-7 rounded-full transition-colors relative flex-shrink-0 ${
-                permissions.prescriptionUpload ? 'bg-teal-700' : 'bg-gray-300'
-              }`}
-            >
-              <span className={`w-5 h-5 rounded-full bg-white absolute top-1 transition-transform ${
-                permissions.prescriptionUpload ? 'right-1' : 'left-1'
-              }`} />
-            </button>
-          </div>
-
-          {/* Toggle 3: View Visit Summary */}
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-200">
-            <div className="space-y-0.5 pr-4">
-              <h4 className="font-extrabold text-sm text-gray-900">
-                {language === 'ml' ? 'ഡോക്ടർ സന്ദർശന വിവരങ്ങൾ കാണാൻ അനുവാദം' : 'Share Doctor Visit Summaries'}
-              </h4>
-              <p className="text-xs text-gray-600">
-                {language === 'ml' 
-                  ? 'ഡോക്ടറെ കാണാൻ തയ്യാറാക്കിയ സമ്മറിയും ചോദ്യങ്ങളും കുടുംബാംഗത്തിന് കാണാം.' 
-                  : 'Allows caregiver to view prepared symptom briefs and doctor questions.'}
-              </p>
-            </div>
-            <button
-              onClick={() => togglePermission('viewVisitSummary')}
-              className={`w-12 h-7 rounded-full transition-colors relative flex-shrink-0 ${
-                permissions.viewVisitSummary ? 'bg-teal-700' : 'bg-gray-300'
-              }`}
-            >
-              <span className={`w-5 h-5 rounded-full bg-white absolute top-1 transition-transform ${
-                permissions.viewVisitSummary ? 'right-1' : 'left-1'
-              }`} />
-            </button>
-          </div>
-
-        </div>
-      </div>
-
-      {/* Recent Alerts Feed */}
-      <div className="bg-teal-50/50 rounded-3xl p-6 border border-teal-200 space-y-3">
-        <h4 className="font-extrabold text-sm text-teal-950 flex items-center gap-2">
-          <Bell className="w-4 h-4 text-teal-700" />
-          <span>{language === 'ml' ? 'അടുത്തിടെ അയച്ച അറിയിപ്പുകൾ:' : 'Recent Caregiver Updates:'}</span>
-        </h4>
-        {caregiver.recentAlerts.map(alert => (
-          <div key={alert.id} className="p-3 bg-white rounded-xl border border-teal-100 text-xs text-gray-700 flex items-start justify-between gap-4">
-            <span>{alert.message_ml}</span>
-            <span className="text-[10px] text-gray-400 font-bold whitespace-nowrap">{alert.timestamp}</span>
-          </div>
-        ))}
-      </div>
+      )}
 
     </div>
   );

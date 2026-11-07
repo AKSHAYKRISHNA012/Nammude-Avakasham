@@ -84,8 +84,8 @@ export default function LandingPage({
     {
       q_ml: "സർക്കാർ പദ്ധതികൾ എങ്ങനെ കണ്ടെത്താം? (Can I discover government schemes?)",
       q_en: "Can I discover government schemes?",
-      a_ml: "പ്രായം, വരുമാനം, തദ്ദേശ സ്ഥാപനം, റേഷൻ കാർഡ് തരം എന്നിവ നൽകിയാൽ നിങ്ങൾക്ക് അർഹമായ ഇന്ദിരാഗാന്ധി വാർദ്ധക്യ പെൻഷൻ, ആശ്വാസകിരണം, വയോമിത്രം തുടങ്ങിയ 75-ൽ അധികം പദ്ധതികൾ തൽക്ഷണം കണ്ടെത്താം.",
-      a_en: "By answering simple questions regarding age, locality, disability percentage, and ration card type, the platform instantly maps eligibility across over 75 Central and Kerala Government schemes."
+      a_ml: "പ്രായം, വരുമാനം, തദ്ദേശ സ്ഥാപനം, റേഷൻ കാർഡ് തരം എന്നിവ നൽകിയാൽ നിങ്ങൾക്ക് അർഹമായ ഇന്ദിരാഗാന്ധി വാർദ്ധക്യ പെൻഷൻ, ആശ്വാസകിരണം, വയോമിത്രം, കാരുണ്യ KASP തുടങ്ങിയ 10 പരിശോധിച്ചുറപ്പിച്ച മുൻഗണനാ പദ്ധതികൾ തൽക്ഷണം കണ്ടെത്താം.",
+      a_en: "By answering simple questions regarding age, locality, disability percentage, and ration card type, the platform instantly maps eligibility across 10 authoritative Central and Kerala Government flagship schemes."
     },
     {
       q_ml: "എന്റെ സ്വകാര്യ വിവരങ്ങൾ സുരക്ഷിതമാണോ? (Is my personal information protected?)",
@@ -114,11 +114,44 @@ export default function LandingPage({
       icon: Search,
       title_ml: 'ക്ഷേമ പദ്ധതി കണ്ടെത്തൽ',
       title_en: 'Scheme Discovery',
-      desc_ml: 'കേന്ദ്ര-സംസ്ഥാന സർക്കാരുകളുടെ 75+ സാമൂഹിക ക്ഷേമ പദ്ധതികളിൽ നിന്ന് അർഹമായവ കണ്ടെത്തുക.',
-      desc_en: 'Explore over 75 verified Central and Kerala Government social security welfare schemes.',
-      badge_ml: '75+ പദ്ധതികൾ',
-      badge_en: '75+ Schemes',
+      desc_ml: 'കേന്ദ്ര-സംസ്ഥാന സർക്കാരുകളുടെ 10 പരിശോധിച്ചുറപ്പിച്ച മുൻഗണനാ ക്ഷേമ പദ്ധതികളിൽ നിന്ന് അർഹമായവ കണ്ടെത്തുക.',
+      desc_en: 'Explore 10 authoritatively verified Central and Kerala Government flagship welfare schemes.',
+      badge_ml: '10 പദ്ധതികൾ',
+      badge_en: '10 Verified Schemes',
       action: () => onNavigateToMode('rights', 'schemes')
+    },
+    {
+      id: 'checklist',
+      icon: ClipboardCheck,
+      title_ml: 'അക്ഷയ രേഖാ ചെക്ക്‌ലിസ്റ്റ്',
+      title_en: 'Akshaya Document Checklist',
+      desc_ml: 'അക്ഷയ കേന്ദ്ര സന്ദർശനത്തിന് മുൻപ് ആവശ്യമായ രേഖകൾ പരിശോധിച്ച് പ്രിന്റ് ചെയ്യാവുന്ന പട്ടിക തയ്യാറാക്കുക.',
+      desc_en: 'Generate and print an itemized document checklist tailored to your scheme and ration card.',
+      badge_ml: 'പുതിയത്',
+      badge_en: 'Checklist Generator',
+      action: () => onNavigateToMode('rights', 'checklist')
+    },
+    {
+      id: 'grievance',
+      icon: FileText,
+      title_ml: 'പൗര പരാതി & ഹർജി ഡ്രാഫ്റ്റർ',
+      title_en: 'Citizen Grievance Drafter',
+      desc_ml: 'സേവനാവകാശ നിയമം 2012 പ്രകാരം പെൻഷൻ കാലതാമസത്തിനും മസ്റ്ററിംഗ് പ്രശ്നങ്ങൾക്കും ഹർജി തയ്യാറാക്കുക.',
+      desc_en: 'Draft formal petitions under Kerala Right to Service Act 2012 for Panchayat, DSJO, or CMO Portal.',
+      badge_ml: 'സേവനാവകാശം 2012',
+      badge_en: 'RTS Act 2012',
+      action: () => onNavigateToMode('rights', 'grievance')
+    },
+    {
+      id: 'directory',
+      icon: PhoneCall,
+      title_ml: 'ഔദ്യോഗിക ഡയറക്ടറി',
+      title_en: 'Official 14-District Directory',
+      desc_ml: 'എല്ലാ 14 ജില്ലാ സാമൂഹ്യനീതി ഓഫീസുകളുടെയും (DSJO) സേവന, KSSM ഹെൽപ്‌ലൈനുകളുടെയും ഫോൺ നമ്പറുകൾ.',
+      desc_en: 'Verified direct contacts for all 14 District Social Justice Offices, Sevana, KSSM, and Elderline.',
+      badge_ml: '14 ജില്ലകൾ',
+      badge_en: '14 Districts',
+      action: () => onNavigateToMode('rights', 'directory')
     },
     {
       id: 'eligibility',
@@ -450,7 +483,7 @@ export default function LandingPage({
               <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-emerald-200/80 font-bold">
                 <span className="flex items-center gap-1.5">
                   <Check className="w-4 h-4 text-amber-400 stroke-[3]" />
-                  {language === 'ml' ? '75+ പരിശോധിച്ചുറപ്പിച്ച പദ്ധതികൾ' : '75+ Verified Welfare Schemes'}
+                  {language === 'ml' ? '10 പരിശോധിച്ചുറപ്പിച്ച മുൻഗണനാ പദ്ധതികൾ' : '10 Verified Flagship Schemes'}
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Check className="w-4 h-4 text-amber-400 stroke-[3]" />
@@ -499,7 +532,7 @@ export default function LandingPage({
                     </div>
                   </div>
                   <span className="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 text-[10px] font-black border border-amber-400/30">
-                    ml-IN 100%
+                    {language === 'ml' ? 'തത്സമയ പ്രിവ്യൂ (Interactive Demo)' : 'Interactive Platform Preview'}
                   </span>
                 </div>
 
@@ -1230,103 +1263,105 @@ export default function LandingPage({
 
 
       {/* ─────────────────────────────────────────────────────────────
-          SECTION I: TESTIMONIALS / AUTHENTIC IMPACT
+          SECTION I: CITIZEN RIGHTS CHARTER & STATUTORY GUARANTEES
       ───────────────────────────────────────────────────────────── */}
       <section className="py-20 bg-[#FAF8F5] border-t border-stone-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="text-center max-w-3xl mx-auto space-y-3 mb-14">
             <span className="text-xs font-black uppercase tracking-widest text-emerald-800 bg-emerald-100/80 px-3 py-1 rounded-full border border-emerald-300">
-              {language === 'ml' ? 'സമൂഹത്തിലെ അനുഭവം' : 'Community Use Cases'}
+              {language === 'ml' ? 'നിയമാനുസൃത സംരക്ഷണം' : 'Statutory Guarantees'}
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight">
-              {language === 'ml' ? 'ജനങ്ങൾക്ക് പ്രയോജനപ്പെടുന്ന വിധം' : 'How Citizens Experience the Platform'}
+              {language === 'ml' ? 'പൗരാവകാശ പത്രികയും നിയമാനുസൃത ഉറപ്പുകളും' : 'Kerala Citizen Rights Charter & Legal Safeguards'}
             </h2>
-            <p className="text-xs text-stone-500 font-bold uppercase tracking-wider">
-              {language === 'ml' ? '(വികസന മാതൃകാ അനുഭവങ്ങൾ – Sample Community Profiles)' : '(Representative User Profiles in Development)'}
+            <p className="text-xs sm:text-sm text-stone-600 font-bold max-w-2xl mx-auto leading-relaxed">
+              {language === 'ml' 
+                ? 'കേരളത്തിലെ മുതിർന്ന പൗരന്മാർക്കും ഭിന്നശേഷിക്കാർക്കും ഭരണഘടനയും നിയമസഭയും ഉറപ്പുനൽകുന്ന നിയമപരമായ അവകാശങ്ങൾ.' 
+                : 'Enforceable citizen rights guaranteed under Kerala state legislation and Central statutory acts.'}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             
-            {/* Story 1 */}
-            <div className="bg-white rounded-3xl p-6 border border-stone-200/80 shadow-soft space-y-4 flex flex-col justify-between">
+            {/* Right 1 */}
+            <div className="bg-white rounded-3xl p-6 border-2 border-emerald-100 shadow-soft space-y-4 flex flex-col justify-between">
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-lg">
-                    👵
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xl">
+                    ⚖️
                   </div>
                   <div>
-                    <h3 className="font-black text-sm text-stone-900">
-                      {language === 'ml' ? 'ഭവാനിയമ്മ (68 വയസ്സ്)' : 'Bhavani Amma (68 yrs)'}
+                    <h3 className="font-black text-sm sm:text-base text-stone-900">
+                      {language === 'ml' ? 'കേരള സേവനാവകാശ നിയമം 2012' : 'Right to Service Act 2012'}
                     </h3>
-                    <p className="text-[11px] text-stone-500 font-medium">
-                      {language === 'ml' ? 'പാലക്കാട്, ചിറ്റൂർ' : 'Palakkad, Chittur'}
+                    <p className="text-[11px] text-emerald-800 font-extrabold">
+                      {language === 'ml' ? '45 ദിവസത്തിനകം തീർപ്പാക്കൽ' : 'Mandatory 45-Day Pension SLA'}
                     </p>
                   </div>
                 </div>
-                <p className="text-xs text-stone-600 leading-relaxed font-medium italic">
+                <p className="text-xs text-stone-600 leading-relaxed font-medium">
                   {language === 'ml'
-                    ? '"പഞ്ചായത്ത് ഓഫീസിൽ പോകാതെ തന്നെ ഫോണിലൂടെ സംസാരിച്ച് എനിക്ക് വാർദ്ധക്യ പെൻഷന് അർഹതയുണ്ടെന്ന് മനസ്സിലാക്കാൻ സാധിച്ചു. റേഷൻ കാർഡും ആധാർ നമ്പറും നൽകി അപേക്ഷ തയ്യാറാക്കി തന്നു."'
-                    : '"Without travelling repeatedly to the panchayat office, I verified my old age pension eligibility directly in Malayalam using my voice."'}
+                    ? 'തദ്ദേശ സ്ഥാപനങ്ങളിൽ സമർപ്പിക്കുന്ന സാമൂഹ്യ സുരക്ഷാ പെൻഷൻ അപേക്ഷകളിൽ 45 ദിവസത്തിനകം തീരുമാനമെടുക്കൽ നിയമാനുസൃത അവകാശമാണ്. കാരണമില്ലാതെ വൈകിയാൽ ഉദ്യോഗസ്ഥരിൽ നിന്ന് പിഴ ഈടാക്കാനും പൗരന് അപ്പീൽ നൽകാനും വ്യവസ്ഥയുണ്ട്.'
+                    : 'Statutory mandate requiring Local Self Government institutions to dispose of welfare pension applications within 45 days, with stipulated appellate relief.'}
                 </p>
               </div>
               <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg w-fit">
-                {language === 'ml' ? 'പെൻഷൻ അപേക്ഷകൻ' : 'Pension Applicant'}
+                {language === 'ml' ? 'സേവനാവകാശം (Right to Service)' : 'Statutory Service Guarantee'}
               </span>
             </div>
 
-            {/* Story 2 */}
-            <div className="bg-white rounded-3xl p-6 border border-stone-200/80 shadow-soft space-y-4 flex flex-col justify-between">
+            {/* Right 2 */}
+            <div className="bg-white rounded-3xl p-6 border-2 border-amber-100 shadow-soft space-y-4 flex flex-col justify-between">
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-lg">
-                    👨‍💼
+                  <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-xl">
+                    🛡️
                   </div>
                   <div>
-                    <h3 className="font-black text-sm text-stone-900">
-                      {language === 'ml' ? 'രമേഷ് മേനോൻ (കെയർഗിവർ)' : 'Ramesh Menon (Caregiver)'}
+                    <h3 className="font-black text-sm sm:text-base text-stone-900">
+                      {language === 'ml' ? 'മാതാപിതാക്കളുടെ സംരക്ഷണ നിയമം 2007' : 'Senior Citizens Protection Act 2007'}
                     </h3>
-                    <p className="text-[11px] text-stone-500 font-medium">
-                      {language === 'ml' ? 'തൃശ്ശൂർ' : 'Thrissur'}
+                    <p className="text-[11px] text-amber-800 font-extrabold">
+                      {language === 'ml' ? 'മെയിന്റനൻസ് ട്രിബ്യൂണൽ സംരക്ഷണം' : 'Maintenance Tribunal Safeguard'}
                     </p>
                   </div>
                 </div>
-                <p className="text-xs text-stone-600 leading-relaxed font-medium italic">
+                <p className="text-xs text-stone-600 leading-relaxed font-medium">
                   {language === 'ml'
-                    ? '"പ്രായമായ അച്ഛന്റെ മരുന്നുകൾ ഓർമ്മിപ്പിക്കാൻ വോയ്‌സ് വൈദ്യ വളരെ സഹായകമാണ്. മരുന്ന് കഴിച്ചോ ഇല്ലയോ എന്ന് എനിക്ക് ഫോണിൽ അലർട്ട് ലഭിക്കുന്നു."'
-                    : '"VoiceVaidya keeps my elderly father on track with his cardiac prescriptions and notifies me whenever a dose is due or logged."'}
+                    ? 'മുതിർന്ന പൗരന്മാർക്ക് ഭക്ഷണവും പാർപ്പിടവും ചികിത്സയും നൽകാൻ ഉത്തരവാദപ്പെട്ടവർ വീഴ്ചവരുത്തിയാൽ ആർ.ഡി.ഒ തല മെയിന്റനൻസ് ട്രിബ്യൂണൽ വഴി സംരക്ഷണവും പ്രതിമാസ ജീവനാംശവും ഉറപ്പാക്കുന്നു.'
+                    : 'Provides elderly parents legal entitlement to claim shelter, medical care, and maintenance allowances from legal heirs through Sub-Divisional Maintenance Tribunals.'}
                 </p>
               </div>
               <span className="text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-lg w-fit">
-                {language === 'ml' ? 'കുടുംബ സഹായി' : 'Family Caregiver'}
+                {language === 'ml' ? 'വയോജന സംരക്ഷണം (Elder Welfare)' : 'Senior Maintenance Right'}
               </span>
             </div>
 
-            {/* Story 3 */}
-            <div className="bg-white rounded-3xl p-6 border border-stone-200/80 shadow-soft space-y-4 flex flex-col justify-between">
+            {/* Right 3 */}
+            <div className="bg-white rounded-3xl p-6 border-2 border-teal-100 shadow-soft space-y-4 flex flex-col justify-between">
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-lg">
+                  <div className="w-12 h-12 rounded-2xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-xl">
                     ♿
                   </div>
                   <div>
-                    <h3 className="font-black text-sm text-stone-900">
-                      {language === 'ml' ? 'സുരേഷ് കുമാർ (42 വയസ്സ്)' : 'Suresh Kumar (42 yrs)'}
+                    <h3 className="font-black text-sm sm:text-base text-stone-900">
+                      {language === 'ml' ? 'ഭിന്നശേഷി അവകാശ നിയമം 2016' : 'RPwD Act 2016 (UDID Rights)'}
                     </h3>
-                    <p className="text-[11px] text-stone-500 font-medium">
-                      {language === 'ml' ? 'കോഴിക്കോട്' : 'Kozhikode'}
+                    <p className="text-[11px] text-teal-800 font-extrabold">
+                      {language === 'ml' ? '40%+ വൈകല്യ ആനുകൂല്യങ്ങൾ' : '40%+ Benchmark Disability Entitlement'}
                     </p>
                   </div>
                 </div>
-                <p className="text-xs text-stone-600 leading-relaxed font-medium italic">
+                <p className="text-xs text-stone-600 leading-relaxed font-medium">
                   {language === 'ml'
-                    ? '"ഭിന്നശേഷി പെൻഷനും UDID കാർഡിനുമുള്ള അർഹതയും ആവശ്യമായ മെഡിക്കൽ സർട്ടിഫിക്കറ്റ് നിബന്ധനകളും വളരെ വ്യക്തമായി മനസ്സിലാക്കി തന്നു."'
-                    : '"Understood the exact 40%+ medical board certificate criteria for Kerala Disability Pension and generated an Akshaya-ready draft."'}
+                    ? '40% അല്ലെങ്കിൽ അതിൽ കൂടുതൽ ബെഞ്ച്മാർക്ക് വൈകല്യമുള്ള പൗരന്മാർക്ക് കേന്ദ്ര-സംസ്ഥാന ആനുകൂല്യങ്ങളും, വിദ്യാഭ്യാസ-തൊഴിൽ സംവരണവും, ദേശീയ ഏകീകൃത തിരിച്ചറിയൽ കാർഡും (UDID) തുല്യനീതിയും ഉറപ്പാക്കുന്നു.'
+                    : 'Mandates non-discrimination, 4% reservations, assistive device aids, and unified Swavlamban UDID registration for citizens with benchmark disability.'}
                 </p>
               </div>
               <span className="text-[11px] font-bold text-teal-800 bg-teal-50 px-2.5 py-1 rounded-lg w-fit">
-                {language === 'ml' ? 'ഭിന്നശേഷി ക്ഷേമം' : 'Disability Rights'}
+                {language === 'ml' ? 'തുല്യനീതി (Equal Opportunity)' : 'Accessibility & Welfare'}
               </span>
             </div>
 
@@ -1485,7 +1520,7 @@ export default function LandingPage({
                 </li>
                 <li>
                   <button onClick={() => onNavigateToMode('rights', 'schemes')} className="hover:text-amber-300 transition-colors">
-                    {language === 'ml' ? 'ക്ഷേമ പദ്ധതികൾ (75+)' : 'Welfare Schemes (75+)'}
+                    {language === 'ml' ? 'ക്ഷേമ പദ്ധതികൾ (10)' : 'Welfare Schemes (10)'}
                   </button>
                 </li>
                 <li>

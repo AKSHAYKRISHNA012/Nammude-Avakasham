@@ -10,6 +10,9 @@ import DocumentIntelligence from './components/DocumentIntelligence.jsx';
 import ApplicationCompanion from './components/ApplicationCompanion.jsx';
 import ApplicationTracking from './components/ApplicationTracking.jsx';
 import HumanAssistance from './components/HumanAssistance.jsx';
+import CitizenGrievanceAssistant from './components/CitizenGrievanceAssistant.jsx';
+import OfficialServiceDirectory from './components/OfficialServiceDirectory.jsx';
+import DocumentChecklistGenerator from './components/DocumentChecklistGenerator.jsx';
 import JargonBusterModal from './components/JargonBusterModal.jsx';
 import LegalModal from './components/common/LegalModal.jsx';
 import NetworkResilienceBanner from './components/common/NetworkResilienceBanner.jsx';
@@ -41,19 +44,37 @@ import {
   Users,
   FileHeart,
   HeartPulse,
-  Sparkles
+  Sparkles,
+  Scale,
+  Building2
 } from 'lucide-react';
 
 export default function App() {
   const [language, setLanguage] = useState('ml'); // Default Malayalam-first
   const [highContrast, setHighContrast] = useState(false);
   const [fontSize, setFontSize] = useState(2); // 1 = normal, 2 = large, 3 = extra large
+  const [seniorMode, setSeniorMode] = useState(false);
   const [currentMode, setCurrentMode] = useState('landing'); // 'landing', 'rights', or 'vaidya'
   const [activeScreen, setActiveScreen] = useState('dashboard'); // screen for rights / vaidya
   const [selectedSchemeId, setSelectedSchemeId] = useState('ignaoap');
   const [isJargonModalOpen, setIsJargonModalOpen] = useState(false);
   const [isLegalModalOpen, setIsLegalModalOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+
+  // Toggle Senior Citizen Assistance Mode
+  const toggleSeniorMode = () => {
+    setSeniorMode(prev => {
+      const next = !prev;
+      if (next) {
+        setHighContrast(true);
+        setFontSize(3);
+      } else {
+        setHighContrast(false);
+        setFontSize(2);
+      }
+      return next;
+    });
+  };
 
   // Font size multiplier class
   const fontSizeClasses = {
@@ -67,10 +88,13 @@ export default function App() {
     { id: 'dashboard', label_ml: 'ഡാഷ്‌ബോർഡ്', label_en: 'Dashboard', icon: Home },
     { id: 'voice', label_ml: 'ശബ്ദ സഹായി', label_en: 'Voice AI', icon: Mic, highlight: true },
     { id: 'schemes', label_ml: 'പദ്ധതികൾ', label_en: 'Schemes', icon: Search },
+    { id: 'checklist', label_ml: 'ചെക്ക്‌ലിസ്റ്റ്', label_en: 'Checklist', icon: ClipboardCheck },
+    { id: 'grievance', label_ml: 'പരാതി', label_en: 'Grievance', icon: Scale },
     { id: 'eligibility', label_ml: 'യോജ്യത', label_en: 'Eligibility', icon: CheckCircle2 },
     { id: 'documents', label_ml: 'രേഖകൾ', label_en: 'Documents', icon: FileText },
     { id: 'companion', label_ml: 'അപേക്ഷ', label_en: 'Apply', icon: ClipboardCheck },
     { id: 'tracking', label_ml: 'ട്രാക്കിംഗ്', label_en: 'Track', icon: Clock },
+    { id: 'directory', label_ml: 'ഡയറക്ടറി', label_en: 'Directory', icon: Building2 },
     { id: 'assistance', label_ml: 'സഹായം', label_en: 'Helpline', icon: PhoneCall },
   ];
 
@@ -118,6 +142,8 @@ export default function App() {
             setHighContrast={setHighContrast}
             fontSize={fontSize}
             setFontSize={setFontSize}
+            seniorMode={seniorMode}
+            toggleSeniorMode={toggleSeniorMode}
             activeScreen={activeScreen}
             setActiveScreen={setActiveScreen}
             currentMode={currentMode}
@@ -267,6 +293,24 @@ export default function App() {
 
             {activeScreen === 'tracking' && (
               <ApplicationTracking
+                language={language}
+              />
+            )}
+
+            {activeScreen === 'checklist' && (
+              <DocumentChecklistGenerator
+                language={language}
+              />
+            )}
+
+            {activeScreen === 'grievance' && (
+              <CitizenGrievanceAssistant
+                language={language}
+              />
+            )}
+
+            {activeScreen === 'directory' && (
+              <OfficialServiceDirectory
                 language={language}
               />
             )}

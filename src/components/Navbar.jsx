@@ -9,6 +9,8 @@ export default function Navbar({
   setHighContrast,
   fontSize,
   setFontSize,
+  seniorMode,
+  toggleSeniorMode,
   activeScreen,
   setActiveScreen,
   currentMode,
@@ -168,6 +170,20 @@ export default function Navbar({
                 A+
               </button>
             </div>
+
+            {/* Senior Citizen Assistance Mode Toggle */}
+            <button
+              onClick={toggleSeniorMode}
+              title={language === 'ml' ? 'മുതിർന്ന പൗരന്മാർക്കുള്ള പ്രത്യേക വായനാ സഹായി (Senior Mode)' : 'Senior Citizen Assistance Mode (Max Font & Contrast)'}
+              className={`p-2 sm:px-3 sm:py-2 rounded-xl border text-xs font-black flex items-center gap-1.5 transition-all active:scale-95 ${
+                seniorMode
+                  ? 'bg-amber-400 text-emerald-950 border-amber-300 ring-4 ring-amber-300/60 shadow-lg scale-105'
+                  : 'bg-emerald-900/90 text-amber-300 border-emerald-700 hover:bg-emerald-800'
+              }`}
+            >
+              <span>👵</span>
+              <span className="hidden xl:inline">{language === 'ml' ? 'വയോജന സഹായി' : 'Senior Mode'}</span>
+            </button>
 
             {/* High Contrast Mode Toggle */}
             <button

@@ -39,7 +39,7 @@ export default function WelcomeScreen({ language, setActiveScreen }) {
             
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs sm:text-sm font-black tracking-wide shadow-sm">
               <ShieldCheck className="w-4 h-4 text-amber-300" />
-              <span>{language === 'ml' ? 'കേരള സർക്കാർ ഔദ്യോഗിക വിവരങ്ങൾ' : 'Verified Kerala Govt Welfare Portal'}</span>
+              <span>{language === 'ml' ? 'ഔദ്യോഗിക ചട്ടങ്ങൾ അടിസ്ഥാനമാക്കിയുള്ള സ്വതന്ത്ര പൗരസഹായി' : 'Independent Citizen Aid Platform (Rules-Verified)'}</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.15] tracking-tight">
