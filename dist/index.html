@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ml">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌴</text></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>നമ്മുടെ അവകാശം – AI Rights Navigator</title>
+    <!-- Kerala Typography Fonts: Noto Sans Malayalam & Manrope -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Malayalam:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN for instant, zero-build utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              kerala: {
+                green: '#0F5132',
+                lightGreen: '#E8F5E9',
+                gold: '#B8860B',
+                sand: '#FFFDF9',
+                dark: '#1C2826',
+                border: '#D1E7DD',
+                accent: '#D4AF37'
+              }
+            },
+            fontFamily: {
+              sans: ['"Noto Sans Malayalam"', 'Manrope', 'system-ui', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        font-family: 'Noto Sans Malayalam', 'Manrope', system-ui, -apple-system, sans-serif;
+        background-color: #FAF8F5;
+        color: #1A202C;
+        -webkit-font-smoothing: antialiased;
+      }
+      
+      /* High Contrast Accessibility Theme */
+      .high-contrast {
+        background-color: #000000 !important;
+        color: #FFFF00 !important;
+      }
+      .high-contrast .bg-white,
+      .high-contrast .bg-gray-50,
+      .high-contrast .bg-kerala-sand {
+        background-color: #111111 !important;
+        border-color: #FFFF00 !important;
+        color: #FFFFFF !important;
+      }
+      .high-contrast button {
+        border: 2px solid #FFFF00 !important;
+      }
+      .high-contrast a, .high-contrast text, .high-contrast span {
+        color: #FFFF00 !important;
+      }
+      
+      /* Custom scrollbars */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #F1F1F1;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #CBD5E1;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94A3B8;
+      }
+
+      /* Audio pulse animation */
+      @keyframes micPulse {
+        0%, 100% {
+          transform: scale(1);
+          box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6);
+        }
+        50% {
+          transform: scale(1.08);
+          box-shadow: 0 0 0 16px rgba(220, 38, 38, 0);
+        }
+      }
+      .animate-mic-pulse {
+        animation: micPulse 1.8s infinite;
+      }
+    </style>
+    <script type="module" crossorigin src="/assets/index-DQaKLkC6.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
