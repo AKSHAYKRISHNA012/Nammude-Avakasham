@@ -41,7 +41,7 @@ export default function App() {
   const [language, setLanguage] = useState('ml'); // Default Malayalam-first
   const [highContrast, setHighContrast] = useState(false);
   const [fontSize, setFontSize] = useState(2); // 1 = normal, 2 = large, 3 = extra large
-  const [currentMode, setCurrentMode] = useState('vaidya'); // 'rights' or 'vaidya' (starts on VoiceVaidya or can toggle)
+  const [currentMode, setCurrentMode] = useState('vaidya'); // 'rights' or 'vaidya'
   const [activeScreen, setActiveScreen] = useState('vaidya_home'); // initial screen
   const [selectedSchemeId, setSelectedSchemeId] = useState('ignaoap');
   const [isJargonModalOpen, setIsJargonModalOpen] = useState(false);
@@ -79,9 +79,9 @@ export default function App() {
   const currentNavItems = currentMode === 'vaidya' ? vaidyaNavItems : rightsNavItems;
 
   return (
-    <div className={`min-h-screen flex flex-col transition-colors ${highContrast ? 'high-contrast' : 'bg-amber-50/20 text-gray-900'} ${fontSizeClasses[fontSize]}`}>
+    <div className={`min-h-screen flex flex-col transition-colors ${highContrast ? 'high-contrast' : 'bg-[#FAF8F5] text-gray-900'} ${fontSizeClasses[fontSize]}`}>
       
-      {/* Top Accessible Navbar */}
+      {/* Top Glassmorphic Navbar */}
       <Navbar
         language={language}
         setLanguage={setLanguage}
@@ -96,15 +96,15 @@ export default function App() {
         onOpenJargonModal={() => setIsJargonModalOpen(true)}
       />
 
-      {/* Mode Switch Banner for Mobile */}
-      <div className="lg:hidden bg-emerald-950 px-4 py-2 border-b border-emerald-800 flex items-center justify-center gap-2">
+      {/* Mode Switch Banner for Mobile Screens */}
+      <div className="lg:hidden bg-emerald-950 px-4 py-2.5 border-b border-emerald-800 flex items-center justify-center gap-3 shadow-md">
         <button
           onClick={() => {
             setCurrentMode('rights');
             setActiveScreen('welcome');
           }}
-          className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1 ${
-            currentMode === 'rights' ? 'bg-amber-400 text-emerald-950' : 'text-emerald-300'
+          className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
+            currentMode === 'rights' ? 'bg-amber-400 text-emerald-950 shadow-md ring-2 ring-amber-300/60' : 'text-emerald-200 hover:text-white'
           }`}
         >
           <span>🌴</span>
@@ -116,8 +116,8 @@ export default function App() {
             setCurrentMode('vaidya');
             setActiveScreen('vaidya_home');
           }}
-          className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1 ${
-            currentMode === 'vaidya' ? 'bg-teal-400 text-teal-950' : 'text-emerald-300'
+          className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 ${
+            currentMode === 'vaidya' ? 'bg-teal-400 text-teal-950 shadow-md ring-2 ring-teal-300/60' : 'text-emerald-200 hover:text-white'
           }`}
         >
           <span>🩺</span>
@@ -126,7 +126,7 @@ export default function App() {
       </div>
 
       {/* Main Content Area */}
-      <main className="flex-1 pb-24">
+      <main className="flex-1 pb-32">
         
         {/* VoiceVaidya Screens */}
         {activeScreen === 'vaidya_home' && (
@@ -240,9 +240,9 @@ export default function App() {
         )}
       </main>
 
-      {/* Sticky Bottom Accessible Navigation Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t-2 border-emerald-200 shadow-2xl">
-        <div className="max-w-5xl mx-auto px-2 flex items-center justify-around py-2">
+      {/* Modern Floating Island Bottom Dock */}
+      <div className="fixed bottom-4 left-0 right-0 z-40 px-3 pointer-events-none">
+        <nav className="pointer-events-auto floating-dock rounded-3xl max-w-xl sm:max-w-2xl mx-auto px-3 py-2 flex items-center justify-around border-2 border-white/80 shadow-elevated">
           {currentNavItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeScreen === item.id;
@@ -250,25 +250,25 @@ export default function App() {
               <button
                 key={item.id}
                 onClick={() => setActiveScreen(item.id)}
-                className={`flex flex-col items-center justify-center p-2 rounded-2xl transition-all relative ${
+                className={`flex flex-col items-center justify-center py-1.5 px-2.5 rounded-2xl transition-all relative ${
                   isActive
-                    ? 'text-teal-800 font-extrabold scale-105'
-                    : 'text-gray-500 hover:text-teal-700'
-                } ${item.highlight ? 'bg-amber-400 text-teal-950 font-black px-3 shadow-md' : ''}`}
+                    ? 'text-teal-900 font-black scale-108'
+                    : 'text-gray-500 hover:text-teal-800'
+                } ${item.highlight ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-emerald-950 font-black px-4 shadow-md ring-2 ring-amber-300/60 scale-105' : ''}`}
                 title={language === 'ml' ? item.label_ml : item.label_en}
               >
-                <Icon className={`w-5 h-5 ${isActive && !item.highlight ? 'text-teal-700 stroke-[2.5]' : ''}`} />
-                <span className="text-[10px] sm:text-[11px] mt-0.5 tracking-tight truncate max-w-[65px] text-center">
+                <Icon className={`w-5 h-5 ${isActive && !item.highlight ? 'text-teal-700 stroke-[2.8]' : ''}`} />
+                <span className="text-[10px] sm:text-[11px] mt-0.5 tracking-tight font-extrabold truncate max-w-[65px] text-center">
                   {language === 'ml' ? item.label_ml : item.label_en}
                 </span>
                 {isActive && !item.highlight && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-teal-700 mt-0.5"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-teal-700 mt-0.5 shadow-sm"></span>
                 )}
               </button>
             );
           })}
-        </div>
-      </nav>
+        </nav>
+      </div>
 
       {/* Government Jargon Glossary Modal */}
       <JargonBusterModal

@@ -12,9 +12,12 @@ import {
   ShieldAlert, 
   HeartPulse,
   Pill,
-  Clock
+  Clock,
+  User,
+  Bot
 } from 'lucide-react';
 import { speakText, stopSpeech, createSpeechRecognizer } from '../../utils/speech.js';
+import AudioWaveVisualizer from '../common/AudioWaveVisualizer.jsx';
 
 export default function VaidyaVoiceChat({ language }) {
   const [messages, setMessages] = useState([
@@ -150,7 +153,6 @@ export default function VaidyaVoiceChat({ language }) {
       });
     }
 
-    // AI Vaidya Medical Assistant Response
     setTimeout(() => {
       let reply_ml = "";
       let reply_en = "";
@@ -193,30 +195,29 @@ export default function VaidyaVoiceChat({ language }) {
       setMessages(prev => [...prev, botMsg]);
       setIsLoading(false);
 
-      // Play audio response
       handlePlayAudio(botMsg.id, language === 'ml' ? reply_ml : reply_en);
-    }, 600);
+    }, 500);
   };
 
   return (
-    <div className="max-w-4xl mx-auto py-6 px-4 sm:px-6 flex flex-col h-[calc(100vh-8rem)]">
+    <div className="max-w-4xl mx-auto py-6 px-4 sm:px-6 flex flex-col h-[calc(100vh-8.5rem)]">
       
-      {/* Header bar */}
-      <div className="bg-white rounded-2xl p-4 shadow-sm border border-emerald-100 flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-teal-600 text-white flex items-center justify-center font-bold text-xl shadow">
+      {/* Top Header Card */}
+      <div className="glass-card rounded-3xl p-4 sm:p-5 shadow-soft border border-teal-100 flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3.5">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-700 to-emerald-600 text-white flex items-center justify-center font-bold text-2xl shadow-md">
             🩺
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="font-extrabold text-gray-900 text-base sm:text-lg">
+              <h2 className="font-black text-gray-900 text-base sm:text-lg">
                 {language === 'ml' ? 'വോയ്‌സ് വൈദ്യ (സംസാരിക്കാം)' : 'VoiceVaidya (Talk to Vaidya)'}
               </h2>
-              <span className="text-[10px] bg-teal-100 text-teal-800 font-extrabold px-2 py-0.5 rounded-full">
+              <span className="text-[10px] bg-teal-100 text-teal-900 font-black px-2.5 py-0.5 rounded-full border border-teal-300">
                 AI Companion
               </span>
             </div>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 font-medium">
               {language === 'ml' 
                 ? 'മുതിർന്നവർക്കായി ലളിതമായ മലയാളത്തിലും മംഗ്ലീഷിലും സംസാരിക്കുന്ന ആരോഗ്യ സഹായി' 
                 : 'Malayalam & Manglish senior-friendly voice healthcare companion'}
@@ -239,8 +240,8 @@ export default function VaidyaVoiceChat({ language }) {
             ]);
             setEmergencyAlert(null);
           }}
-          className="p-2 text-gray-400 hover:text-teal-700 hover:bg-teal-50 rounded-xl transition-colors"
-          title="Reset"
+          className="p-2.5 text-gray-400 hover:text-teal-700 hover:bg-teal-50 rounded-2xl transition-colors border border-transparent hover:border-teal-200"
+          title="Reset Conversation"
         >
           <RefreshCw className="w-4 h-4" />
         </button>
@@ -248,14 +249,14 @@ export default function VaidyaVoiceChat({ language }) {
 
       {/* Emergency Alert Banner if triggered */}
       {emergencyAlert && (
-        <div className="mb-4 p-4 rounded-2xl bg-rose-600 text-white shadow-lg animate-pulse flex items-start justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <ShieldAlert className="w-6 h-6 text-yellow-300 flex-shrink-0 mt-0.5" />
+        <div className="mb-4 p-5 rounded-3xl bg-rose-600 text-white shadow-xl animate-pulse flex items-start justify-between gap-4 border-2 border-yellow-300">
+          <div className="flex items-start gap-3.5">
+            <ShieldAlert className="w-7 h-7 text-yellow-300 flex-shrink-0 mt-0.5" />
             <div>
-              <h4 className="font-black text-sm text-yellow-200">
+              <h4 className="font-black text-base text-yellow-200">
                 {language === 'ml' ? emergencyAlert.title_ml : emergencyAlert.title_en}
               </h4>
-              <p className="text-xs text-white mt-1 leading-relaxed">
+              <p className="text-xs text-white/95 mt-1 leading-relaxed font-medium">
                 {language === 'ml' ? emergencyAlert.desc_ml : emergencyAlert.desc_en}
               </p>
             </div>
@@ -263,14 +264,14 @@ export default function VaidyaVoiceChat({ language }) {
           <div className="flex flex-col sm:flex-row gap-2 flex-shrink-0">
             <a
               href="tel:108"
-              className="px-4 py-2 bg-yellow-400 hover:bg-yellow-300 text-rose-950 font-black text-xs rounded-xl shadow flex items-center gap-1.5"
+              className="px-5 py-2.5 bg-yellow-400 hover:bg-yellow-300 text-rose-950 font-black text-xs rounded-xl shadow flex items-center justify-center gap-1.5"
             >
               <PhoneCall className="w-4 h-4" />
               <span>108 ആംബുലൻസ്</span>
             </a>
             <a
               href="tel:1056"
-              className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white font-bold text-xs rounded-xl flex items-center gap-1.5"
+              className="px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1.5"
             >
               <PhoneCall className="w-4 h-4" />
               <span>1056 ദിശ</span>
@@ -279,8 +280,8 @@ export default function VaidyaVoiceChat({ language }) {
         </div>
       )}
 
-      {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto space-y-4 p-4 bg-teal-50/30 rounded-2xl border border-teal-100">
+      {/* Chat Messages Screen */}
+      <div className="flex-1 overflow-y-auto space-y-4 p-5 bg-white/60 backdrop-blur-md rounded-3xl border border-teal-100 shadow-inner">
         {messages.map((msg) => {
           const isVaidya = msg.sender === 'vaidya';
           const text = language === 'ml' ? msg.text_ml : msg.text_en;
@@ -292,25 +293,39 @@ export default function VaidyaVoiceChat({ language }) {
               className={`flex flex-col ${isVaidya ? 'items-start' : 'items-end'}`}
             >
               <div
-                className={`max-w-[85%] sm:max-w-[78%] rounded-3xl p-4 sm:p-5 shadow-sm text-sm sm:text-base leading-relaxed ${
+                className={`max-w-[85%] sm:max-w-[78%] rounded-3xl p-5 shadow-sm text-sm sm:text-base leading-relaxed ${
                   isVaidya
-                    ? 'bg-white text-gray-900 border-2 border-teal-100 rounded-tl-sm'
-                    : 'bg-teal-700 text-white font-medium rounded-tr-sm'
+                    ? 'bg-white text-gray-900 border-2 border-teal-100/80 rounded-tl-sm shadow-soft'
+                    : 'bg-gradient-to-r from-teal-800 to-emerald-700 text-white font-medium rounded-tr-sm shadow-md'
                 }`}
               >
-                <p className="whitespace-pre-line">{text}</p>
+                <div className="flex items-center gap-2 mb-2 pb-1.5 border-b border-gray-100/60 text-xs font-bold text-teal-800">
+                  {isVaidya ? (
+                    <>
+                      <Bot className="w-4 h-4 text-teal-700" />
+                      <span>വോയ്‌സ് വൈദ്യ AI</span>
+                    </>
+                  ) : (
+                    <>
+                      <User className="w-4 h-4 text-emerald-200" />
+                      <span className="text-emerald-100">നിങ്ങൾ (You)</span>
+                    </>
+                  )}
+                </div>
+
+                <p className="whitespace-pre-line font-medium">{text}</p>
 
                 {isVaidya && (
                   <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
                     <button
                       onClick={() => handlePlayAudio(msg.id, text)}
-                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                      className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-black transition-all ${
                         isThisSpeaking
                           ? 'bg-rose-600 text-white animate-pulse'
-                          : 'bg-teal-50 text-teal-800 hover:bg-teal-100 border border-teal-200'
+                          : 'bg-teal-50 text-teal-900 hover:bg-teal-100 border border-teal-200'
                       }`}
                     >
-                      {isThisSpeaking ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                      {isThisSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-teal-700" />}
                       <span>
                         {isThisSpeaking 
                           ? (language === 'ml' ? 'നിർത്തുക' : 'Stop') 
@@ -318,21 +333,19 @@ export default function VaidyaVoiceChat({ language }) {
                       </span>
                     </button>
 
-                    <span className="text-[10px] text-gray-400 font-semibold">
-                      VoiceVaidya AI
-                    </span>
+                    <AudioWaveVisualizer isPlaying={isThisSpeaking} color="bg-teal-700" />
                   </div>
                 )}
               </div>
 
               {/* Suggestions */}
               {isVaidya && msg.suggestedQueries && (
-                <div className="flex flex-wrap gap-2 mt-2 ml-2">
+                <div className="flex flex-wrap gap-2 mt-2.5 ml-2">
                   {msg.suggestedQueries.map((query, idx) => (
                     <button
                       key={idx}
                       onClick={() => handleSendMessage(query)}
-                      className="px-3 py-1.5 rounded-full bg-emerald-100 hover:bg-emerald-200 text-emerald-900 border border-emerald-300 text-xs font-bold transition-transform active:scale-95 shadow-sm"
+                      className="px-3.5 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border border-emerald-300 text-xs font-black transition-transform active:scale-95 shadow-sm"
                     >
                       {query}
                     </button>
@@ -345,14 +358,14 @@ export default function VaidyaVoiceChat({ language }) {
 
         {interimText && (
           <div className="flex flex-col items-end">
-            <div className="max-w-[75%] rounded-3xl p-4 bg-teal-600 text-white text-sm italic opacity-80 animate-pulse">
+            <div className="max-w-[75%] rounded-3xl p-4 bg-teal-700 text-white text-sm italic opacity-85 animate-pulse">
               "{interimText}..."
             </div>
           </div>
         )}
 
         {isLoading && (
-          <div className="flex items-center gap-2 p-3 bg-white rounded-2xl w-fit border border-gray-200 text-gray-500 text-xs">
+          <div className="flex items-center gap-2.5 p-3.5 bg-white rounded-2xl w-fit border border-teal-200 text-teal-900 text-xs font-bold shadow-sm">
             <Sparkles className="w-4 h-4 text-teal-600 animate-spin" />
             <span>{language === 'ml' ? 'വൈദ്യ വിവരങ്ങൾ പരിശോധിക്കുന്നു...' : 'Consulting health guidance...'}</span>
           </div>
@@ -362,29 +375,29 @@ export default function VaidyaVoiceChat({ language }) {
       </div>
 
       {/* Voice and Text Input Area */}
-      <div className="mt-4 bg-white rounded-2xl p-3 sm:p-4 border-2 border-teal-200 shadow-md">
+      <div className="mt-4 glass-card rounded-3xl p-3 sm:p-4 border-2 border-teal-200 shadow-elevated">
         {isListening && (
-          <div className="mb-3 px-4 py-2 bg-rose-50 border border-rose-200 rounded-xl flex items-center justify-between text-xs text-rose-800 font-bold animate-pulse">
-            <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-rose-600 animate-ping"></span>
+          <div className="mb-3 px-4 py-2.5 bg-rose-50 border border-rose-200 rounded-2xl flex items-center justify-between text-xs text-rose-900 font-black animate-pulse">
+            <div className="flex items-center gap-2.5">
+              <span className="w-3.5 h-3.5 rounded-full bg-rose-600 animate-ping"></span>
               <span>{language === 'ml' ? 'വൈദ്യ കേൾക്കുന്നു... മലയാളത്തിൽ സംസാരിക്കൂ' : 'Listening... Speak now in Malayalam'}</span>
             </div>
             <button 
               onClick={toggleListening}
-              className="px-2 py-1 bg-rose-600 text-white rounded-md text-[10px]"
+              className="px-3 py-1 bg-rose-600 text-white rounded-xl text-xs font-bold"
             >
               Stop
             </button>
           </div>
         )}
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <button
             onClick={toggleListening}
             className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center transition-all flex-shrink-0 shadow-lg ${
               isListening
                 ? 'bg-rose-600 text-white animate-mic-pulse ring-4 ring-rose-300'
-                : 'bg-teal-700 hover:bg-teal-600 text-amber-300'
+                : 'bg-gradient-to-tr from-teal-800 to-emerald-700 hover:from-teal-700 hover:to-emerald-600 text-amber-300 border border-white/40'
             }`}
             title="Microphone"
           >
@@ -399,27 +412,27 @@ export default function VaidyaVoiceChat({ language }) {
             placeholder={
               language === 'ml'
                 ? 'മൈക്കിൽ സംസാരിക്കാം അല്ലെങ്കിൽ ചോദ്യം ഇവിടെ എഴുതാം...'
-                : 'Speak or type medical query here...'
+                : 'Speak with mic or type medical question here...'
             }
-            className="flex-1 bg-gray-50 border border-gray-300 rounded-2xl px-4 py-3.5 text-sm sm:text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white"
+            className="flex-1 bg-gray-50/80 border border-gray-300 rounded-2xl px-5 py-4 text-sm sm:text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white font-medium"
           />
 
           <button
             onClick={() => handleSendMessage()}
             disabled={!inputQuery.trim() || isLoading}
-            className="w-12 h-12 rounded-2xl bg-teal-600 hover:bg-teal-500 disabled:opacity-40 text-white flex items-center justify-center font-bold shadow transition-transform active:scale-95 flex-shrink-0"
+            className="w-13 h-13 rounded-2xl bg-gradient-to-r from-teal-700 to-emerald-700 hover:from-teal-600 hover:to-emerald-600 disabled:opacity-40 text-white flex items-center justify-center font-bold shadow-md transition-transform active:scale-95 flex-shrink-0"
           >
             <Send className="w-5 h-5" />
           </button>
         </div>
 
         {/* Safety Disclaimer Footer */}
-        <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-100 text-[11px] text-gray-500 px-1">
-          <span className="flex items-center gap-1">
-            <HeartPulse className="w-3.5 h-3.5 text-teal-600" />
-            <span>{language === 'ml' ? 'മുന്നറിയിപ്പ്: വോയ്‌സ് വൈദ്യ ഡോക്ടറുടെ പരിശോധനയ്ക്ക് പകരമല്ല. ഡോക്ടറുടെ നിർദ്ദേശം പാലിക്കുക.' : 'Note: VoiceVaidya does not replace physician consultation.'}</span>
+        <div className="flex items-center justify-between mt-2.5 pt-2 border-t border-gray-100 text-[11px] text-gray-500 px-1 font-medium">
+          <span className="flex items-center gap-1.5">
+            <HeartPulse className="w-3.5 h-3.5 text-teal-700" />
+            <span>{language === 'ml' ? 'വോയ്‌സ് വൈദ്യ ഡോക്ടറുടെ പരിശോധനയ്ക്ക് പകരമല്ല. ഡോക്ടറുടെ നിർദ്ദേശം പാലിക്കുക.' : 'VoiceVaidya does not replace physician consultation.'}</span>
           </span>
-          <span className="font-bold text-teal-800">108 / 1056</span>
+          <span className="font-extrabold text-teal-900">108 / 1056</span>
         </div>
       </div>
 
